@@ -2,6 +2,7 @@
 
 ```chandralc``` is a Python module aimed at easing access to Chandra X-ray Observatory lightcurves and promoting citizen science. It includes several tools for accessing and analysing data.
 
+To see ```chandralc``` in action, check out <a href="https://github.com/sammarth-k/chandralc/blob/main/demo.ipynb">the demo</a>.
 ### Features:
 
 ##### Downloads:
