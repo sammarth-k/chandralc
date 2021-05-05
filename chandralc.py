@@ -471,6 +471,9 @@ class ChandraLightcurve(object):
         self.obsid = file[1]
         self.coords = extract_coords(self.path)
 
+        # raw data
+        self.raw_phot = [self.df.COUNTS[i] if self.df.EXPOSURE[i] > 0 else 0 for i in range(len(self.df))]
+
     def lightcurve(self, binning=500.0, figsize=(15, 9), rate=True, color="blue", fontsize=25, family="sans serif", save=False):
         """Plot binned lightcurves over time.
 
@@ -599,10 +602,10 @@ class ChandraLightcurve(object):
             Time period of frequency with maximum amplitude
         """
 
-        f, Pxx_den = signal.periodogram(self.count_array)
+        f, Pxx_den = signal.periodogram(self.raw_phot)
         plt.semilogx(f, Pxx_den)
         plt.xlabel('frequency [Hz]')
         plt.ylabel('PSD [V**2/Hz]')
         plt.show()
 
-        return (1/f[list(Pxx_den).index(max(Pxx_den))])*3.24
+        return (1/f[list(Pxx_den).index(max(Pxx_den))])*3.241
