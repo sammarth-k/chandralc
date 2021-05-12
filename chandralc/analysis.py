@@ -23,7 +23,6 @@ def psd(lc):
 
     return (1/f[list(Pxx_den).index(max(Pxx_den))])*3.241
 
-
 def bin(lc, binsize):
     """Bins photon counts.
 
@@ -42,12 +41,12 @@ def bin(lc, binsize):
     binned_photons = []
 
     # range: total number of df points over included bins --> temp3 of intervals
-    for j in range(0, len(lc.df.COUNTS)//binsize):
+    for j in range(0, len(lc.raw_phot)//binsize):
         temp2 = 0
         j *= binsize
         for k in range(binsize):
             # sum of all photons within one interval
-            temp2 = temp2 + lc.df.COUNTS[j+k]
+            temp2 = temp2 + lc.raw_phot[j+k]
 
         # appends that sum to a list
         binned_photons.append(temp2)

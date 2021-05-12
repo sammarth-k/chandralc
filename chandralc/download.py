@@ -50,11 +50,6 @@ def download_db():
 
         count += 1
 
-
-download_db()
-
-
-
 def get_files(galaxy):
     """Get a list of all files within a galaxy.
 

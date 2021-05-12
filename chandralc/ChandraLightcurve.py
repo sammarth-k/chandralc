@@ -1,14 +1,10 @@
 # dependencies
 
 # External Modules
-import pandas as pd
-import matplotlib.pyplot as plt
 import numpy as np
-from scipy import signal
 
 # User made modules
 from chandralc import convert, analysis, plot
-
 class ChandraLightcurve(object):
     """Class for lightcurve plotting and analysis.
 
@@ -30,7 +26,6 @@ class ChandraLightcurve(object):
         Observation ID
     coords: str
         Source coordinates in J2000 format
-
     """
 
     def __init__(self, file):
@@ -48,28 +43,24 @@ class ChandraLightcurve(object):
         elif "fits" in file:
             self.df = convert.fits_to_df(file, convert.header_check(file))
 
-        chandra_bin = 3.241039999999654
+        self.chandra_bin = 3.241039999999654
 
-        self.cumulative_count_arr = []
+        self.raw_phot = np.array(self.df[self.df.EXPOSURE > 0].COUNTS)
 
-        count = 0
+        self.cumulative = []
 
-        # Creating counts array
-        for index, row in self.df.iterrows():
-            if self.df['EXPOSURE'][index] > 0:
-                count += self.df.COUNTS[index]
-            elif self.df['EXPOSURE'][index] == 0:
-                count += 0
+        # will count net counts
+        self.count = 0
 
-            self.cumulative_count_arr.append(count)
-
+        for i in self.raw_phot:
+            self.count += i
+            self.cumulative.append(self.count)
         # array for timestamps
-        self.time_array = [chandra_bin / 1000 *
-                           i for i in range(1, len(self.cumulative_count_arr) + 1)]
+        self.time_array = np.array([self.chandra_bin / 1000 *
+                                    i for i in range(1, len(self.raw_phot) + 1)])
 
         # Lightcurve stats
         self.time = round(self.time_array[-1], 3)
-        self.count = count
         self.rate_ks = round(self.count / self.time, 3)
         self.rate_s = round(self.count / (self.time * 1000), 5)
 
@@ -78,10 +69,6 @@ class ChandraLightcurve(object):
         file = file.split("/")[-1] if "/" in file else file
         self.obsid = file[1]
         self.coords = convert.extract_coords(self.path)
-
-        # raw data
-        self.raw_phot = [self.df.COUNTS[i] if self.df.EXPOSURE[i]
-                         > 0 else 0 for i in range(len(self.df))]
 
     def lightcurve(self, binning=500.0, figsize=(15, 9), rate=True, color="blue", fontsize=25, family="sans serif", save=False):
         """Plots cumulative photon counts over time.
@@ -100,8 +87,9 @@ class ChandraLightcurve(object):
             Save figure or not, by default False
         """
 
-        plot.lightcurve(self, binning=binning, figsize=figsize, rate=rate, color=color, fontsize=fontsize, family=family, save=save)
-    
+        plot.lightcurve(self, binning=binning, figsize=figsize, rate=rate,
+                        color=color, fontsize=fontsize, family=family, save=save)
+
     def cumulative(self, figsize=(15, 9), color="blue", fontsize=25, family='sans serif', save=False):
         """Plot binned lightcurves over time.
 
@@ -123,8 +111,8 @@ class ChandraLightcurve(object):
             Save figure or not, by default False
         """
 
-        plot.cumulative(self, figsize=figsize, color=color, fontsize=fontsize, family=family, save=save)
-
+        plot.cumulative(self, figsize=figsize, color=color,
+                        fontsize=fontsize, family=family, save=save)
 
     def psd(self):
         """Plots power spectral density for lightcurve.
@@ -151,4 +139,4 @@ class ChandraLightcurve(object):
             Array of bins
         """
 
-        return analysis.bin(self,binsize)
+        return analysis.bin(self, binsize)
