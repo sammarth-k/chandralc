@@ -1,6 +1,6 @@
 # chandralc
 <p align="center">
- <a href="LICENSE.txt"><img src = "https://img.shields.io/github/license/sammarth-k/chandralc?logo=MIT"></a>[![made-with-python](https://img.shields.io/badge/Made%20with-Python-1f425f.svg)](https://www.python.org/)
+ <a href="LICENSE.txt"><img src = "https://img.shields.io/github/license/sammarth-k/chandralc?logo=MIT"></a><a herf="https://python.org" target="_blank"><img src="https://img.shields.io/badge/Made%20with-Python-1f425f.svg"></a>
  
 </p>
 ```chandralc``` is a Python package aimed at easing access to Chandra X-ray Observatory lightcurves and promoting citizen science. It includes several tools for accessing and analysing data.
