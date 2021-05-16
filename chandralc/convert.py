@@ -1,3 +1,5 @@
+"""This module contains functions for conversion of coordinates and files"""
+
 # dependencies
 from astropy.coordinates import SkyCoord
 from astropy.table import Table
@@ -21,10 +23,10 @@ def to_deg(coordinates):
     """
 
     # using SkyCoord function from astropy to convert HMS to degrees
-    c = SkyCoord(coordinates, unit=(u.hourangle, u.deg))
+    converted_coords = SkyCoord(coordinates, unit=(u.hourangle, u.deg))
 
     # using string manipulation to extract coordinates from SkyCoord object
-    coordinates = tuple(map(float, str(c).split(
+    coordinates = tuple(map(float, str(converted_coords).split(
         "deg")[1].strip(">,\n, ),(").split(", ")))
     return coordinates
 
@@ -50,12 +52,13 @@ def extract_coords(filename):
 
     # extracting right acesnsion (ra) and declination(dec) from filename
     filename = filename.split("_")[0].strip("J").split(plus_minus)
-    ra = ["".join(filename[0][0:2]), "".join(
+    ra_extracted = ["".join(filename[0][0:2]), "".join(
         filename[0][2:4]), "".join(filename[0][4:])]
-    dec = ["".join(filename[1][0:2]), "".join(
+    dec_extracted = ["".join(filename[1][0:2]), "".join(
         filename[1][2:4]), "".join(filename[1][4:])]
 
-    coordinates = " ".join(ra) + " " + plus_minus + " ".join(dec)
+    coordinates = " ".join(ra_extracted) + " " + \
+        plus_minus + " ".join(dec_extracted)
 
     # return coordinates as a string in HH MM SS.SSS format
     return coordinates
@@ -99,8 +102,8 @@ def txt_to_df(file, header):
     cols = ['TIME_BIN', 'TIME_MIN', 'TIME', 'TIME_MAX', 'COUNTS',
             'STAT_ERR', 'AREA', 'EXPOSURE', 'COUNT_RATE', 'COUNT_RATE_ERR']
 
-    df = pd.read_csv(file, skiprows=header, names=cols, sep=" ")
-    return df
+    dataframe = pd.read_csv(file, skiprows=header, names=cols, sep=" ")
+    return dataframe
 
 
 def fits_to_df(file, header):
@@ -128,10 +131,11 @@ def fits_to_df(file, header):
     evt_data = Table(hdu_list[1].data)
 
     # initialising DataFrame
-    df = pd.DataFrame()
+    dataframe = pd.DataFrame()
 
     # writing to dataframe
     for col in cols:
-        exec(f"df['{col}']=list(evt_data['{col}'])")
+        dataframe[col] = list(evt_data[col])
+        # exec(f"df['{col}']=list(evt_data['{col}'])")
 
-    return df
+    return dataframe

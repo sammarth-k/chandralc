@@ -1,8 +1,12 @@
+"""This module contains functions to plot lightcuves."""
+
 # Dependencies
 import numpy as np
 import matplotlib.pyplot as plt
 
-def lightcurve(lc, binning=500.0, figsize=(15, 9), rate=True, color="blue", fontsize=25, family="sans serif", save=False):
+
+def lightcurve(lc, binning=500.0, figsize=(15, 9), rate=True, color="blue", fontsize=25,
+family="sans serif", save=False):
     """Plot binned lightcurves over time.
 
     Parameters
@@ -43,12 +47,12 @@ def lightcurve(lc, binning=500.0, figsize=(15, 9), rate=True, color="blue", font
         photons_in_group.append(temp2)
 
     avg_phot = np.array(photons_in_group) / (lc.chandra_bin *
-                                                group_size) if rate else photons_in_group
+                                             group_size) if rate else photons_in_group
 
     avg = [i for i in avg_phot for j in range(group_size)]
 
     # getting NumPy array length of the array and increasing values by 1
-    f = np.array(range(len(avg))) * lc.chandra_bin/1000
+    time_array = np.array(range(len(avg))) * lc.chandra_bin/1000
 
     # customizing the plot
     plt.figure(figsize=figsize)
@@ -63,20 +67,21 @@ def lightcurve(lc, binning=500.0, figsize=(15, 9), rate=True, color="blue", font
     plt.rc('ytick', labelsize=22)
     plt.title(
         f"{binning}s Binned Lightcurve for {lc.coords} ObsID {lc.obsid}")
-    plt.plot(f, avg, color=color)
+    plt.plot(time_array, avg, color=color)
 
     # adjusting the scale of axis
     upper = np.max(avg)
 
-    if rate == False:
+    if not rate:
         plt.yticks(np.arange(0, upper+1, 3))
 
     if save:
-        f = plt.gcf()
-        f.savefig(
+        figure = plt.gcf()
+        figure.savefig(
             f"chandralc_lightcurve_{lc.coords}_{lc.obsid}_{binning}.jpg", bbox_inches='tight')
 
     plt.show()
+
 
 def cumulative(lc, figsize=(15, 9), color="blue", fontsize=25, family='sans serif', save=False):
     """Plots cumulative photon counts over time.
@@ -99,7 +104,7 @@ def cumulative(lc, figsize=(15, 9), color="blue", fontsize=25, family='sans seri
 
     # plotting
     plt.figure(figsize=figsize)
-    plt.plot(lc.time_array, lc.cumulative, color=color)
+    plt.plot(lc.time_array, lc.cumulative_counts, color=color)
     plt.xlabel("Time (ks)")
     plt.ylabel("Net Photon Counts")
     plt.title(
@@ -112,8 +117,8 @@ def cumulative(lc, figsize=(15, 9), color="blue", fontsize=25, family='sans seri
     plt.rc('ytick', labelsize=22)
 
     if save:
-        f = plt.gcf()
-        f.savefig(
+        figure = plt.gcf()
+        figure.savefig(
             f"chandralc_cumulative_{lc.coords}_{lc.obsid}.jpg", bbox_inches='tight')
 
     plt.show()

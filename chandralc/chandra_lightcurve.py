@@ -1,3 +1,5 @@
+"""This module contains the ChandraLightcurve class"""
+
 # dependencies
 
 # External Modules
@@ -5,7 +7,8 @@ import numpy as np
 
 # User made modules
 from chandralc import convert, analysis, plot
-class ChandraLightcurve(object):
+
+class ChandraLightcurve():
     """Class for lightcurve plotting and analysis.
 
     Attributes
@@ -36,6 +39,7 @@ class ChandraLightcurve(object):
         file : str
             Filename or filepath of raw lightcurve
         """
+
         self.path = file
 
         if "txt" in file:
@@ -47,14 +51,16 @@ class ChandraLightcurve(object):
 
         self.raw_phot = np.array(self.df[self.df.EXPOSURE > 0].COUNTS)
 
-        self.cumulative = []
+        self.cumulative_counts = []
 
         # will count net counts
         self.count = 0
 
         for i in self.raw_phot:
             self.count += i
-            self.cumulative.append(self.count)
+            self.cumulative_counts.append(self.count)
+        
+        self.cumulative_counts = np.array(self.cumulative_counts).astype(int)
         # array for timestamps
         self.time_array = np.array([self.chandra_bin / 1000 *
                                     i for i in range(1, len(self.raw_phot) + 1)])
@@ -70,7 +76,8 @@ class ChandraLightcurve(object):
         self.obsid = file[1]
         self.coords = convert.extract_coords(self.path)
 
-    def lightcurve(self, binning=500.0, figsize=(15, 9), rate=True, color="blue", fontsize=25, family="sans serif", save=False):
+    def lightcurve(self, binning=500.0, figsize=(15, 9), rate=True, color="blue",
+    fontsize=25, family="sans serif", save=False):
         """Plots cumulative photon counts over time.
 
         Parameters
@@ -90,7 +97,8 @@ class ChandraLightcurve(object):
         plot.lightcurve(self, binning=binning, figsize=figsize, rate=rate,
                         color=color, fontsize=fontsize, family=family, save=save)
 
-    def cumulative(self, figsize=(15, 9), color="blue", fontsize=25, family='sans serif', save=False):
+    def cumulative(self, figsize=(15, 9), color="blue", fontsize=25, family='sans serif',
+    save=False):
         """Plot binned lightcurves over time.
 
         Parameters
@@ -125,7 +133,7 @@ class ChandraLightcurve(object):
 
         return analysis.psd(self)
 
-    def bin(self, binsize):
+    def bin_lc(self, binsize):
         """Bins photon counts.
 
         Parameters
@@ -139,4 +147,10 @@ class ChandraLightcurve(object):
             Array of bins
         """
 
-        return analysis.bin(self, binsize)
+        return analysis.bin_lc(self.raw_phot, binsize)
+    
+    def bin_toarrays(self, binsize):
+        return analysis.bin_toarrays(self.raw_phot, binsize)
+    
+    def flare_detect(self, binning=10):
+        return analysis.flare_detect(self, binsize)

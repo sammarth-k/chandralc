@@ -1,1 +1,1 @@
-from chandralc.ChandraLightcurve import ChandraLightcurve
+from chandralc.chandra_lightcurve import *
