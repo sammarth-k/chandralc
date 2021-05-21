@@ -140,7 +140,7 @@ class ChandraLightcurve():
         plot.cumulative(self, figsize=figsize, color=color,
                         fontsize=fontsize, family=family, save=save, directory=directory, show=show)
 
-    def psd(self):
+    def psd(self, save=False, directory=".", show=True):
         """Plots power spectral density for lightcurve.
 
         Returns
@@ -149,7 +149,7 @@ class ChandraLightcurve():
             Time period of frequency with maximum amplitude
         """
 
-        return analysis.psd(self)
+        return analysis.psd(self, save=save, directory=directory, show=show)
 
     def bin_lc(self, binsize):
         """Bins photon counts and returns an array of net counts per bin.

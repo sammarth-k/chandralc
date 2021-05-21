@@ -9,13 +9,19 @@ from scipy import signal
 import numpy as np
 
 
-def psd(lightcurve):
+def psd(lightcurve, save=False, directory=".", show=True):
     """Plots power spectral density for lightcurve.
 
     Parameters
     ----------
     lc: ChandraLightcurve
         ChandraLightcurve object
+    save : bool, optional
+        Save figure or not, by default False
+    directory : str, optional
+        Directory to save figure in, by default "."
+    show : bool, optional
+        Show plot or not, by default True
     Returns
     -------
     float
@@ -26,12 +32,19 @@ def psd(lightcurve):
     plt.semilogx(frequency, power)
     plt.xlabel('frequency [Hz]')
     plt.ylabel('PSD [V**2/Hz]')
-    plt.show()
+    
+    if save:
+        f = plt.gcf()
+        f.savefig(f"{directory}/chandralc_psd_{lightcurve.coords}_{lightcurve.obsid}.jpg", bbox_inches="tight")
+        
+    if show:
+        plt.show()
+        
     plt.close()
     
     return (1/frequency[list(power).index(max(power))])*3.241
 
-
+    
 def bin_lc(lightcurve, binsize):
     """Bins photon counts.
 
