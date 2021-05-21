@@ -19,11 +19,16 @@ To see ```chandralc``` in action, check out <a href="https://github.com/sammarth
 
 ##### Analysis:
 
-- Observation details: Source coordinates, ObsID, total counts, observation time, count rate
+- Observation details:total counts, observation time, count rate (kilosecond, seconds)
+- Source details: coordinates, ObsID, galaxy
 - Cumulative Count plots over time to view net counts over time
 - Lightcurves with custom binning to view data in the form of count rate per bin or net counts per bin over time.
 - Retrieve raw data in the form of a Pandas DataFrame or arrays.
-- Power Spectral Density (PSD) to identify . periodicity and their time periods/frequencies
+- Power Spectral Density (PSD) to identify periodicity and their time periods/frequencies
+
+#### Machine Learning
+
+- Predict whether one or more flares occur in a lightcurve or not
 
 ##### Upcoming features:
 
