@@ -1,5 +1,7 @@
 """This module contains functions for machine learning."""
 
+from chandralc import analysis
+
 import numpy as np
 np.seterr(divide='ignore', invalid='ignore')
 
@@ -54,7 +56,7 @@ def calculate_r(x, y):
         Coefficient of correlation
     """
 
-    return np.mean(to_standard_units(x)*to_standard_units(y))
+    return np.mean(to_standard_units(x) * to_standard_units(y))
 
 
 def linear_reg(x, y):
@@ -122,8 +124,8 @@ def regression_equation(x,y):
         
     return m,c
 
-def sigma_check(array, value, sigma=3):
-     """Checks whether a value is greater than or equal to x standard deviations above the mean.
+def sigma_check(array, value, sigma=3, kind="+"):
+    """Checks whether a value is greater than or equal to x standard deviations above the mean.
      
     Parameters
     ----------
@@ -142,6 +144,12 @@ def sigma_check(array, value, sigma=3):
     
     mean = np.mean(array)
     std = np.std(array)
+    
+    if kind=="-":
+        if value <= mean + sigma * std:
+            return True
+        
+        return False
     
     # checking
     if value >= mean + sigma * std:

@@ -6,6 +6,7 @@ from chandralc import ml
 # dependencies
 import matplotlib.pyplot as plt
 from scipy import signal
+import numpy as np
 
 
 def psd(lightcurve):
@@ -26,7 +27,8 @@ def psd(lightcurve):
     plt.xlabel('frequency [Hz]')
     plt.ylabel('PSD [V**2/Hz]')
     plt.show()
-
+    plt.close()
+    
     return (1/frequency[list(power).index(max(power))])*3.241
 
 
@@ -43,20 +45,20 @@ def bin_lc(lightcurve, binsize):
     Returns
     -------
     list
-        Array of bins
+        Array of net counts per bin.
     """
     binned_photons = []
 
     # range: total number of df points over included bins --> temp3 of intervals
     for j in range(0, len(lightcurve)//binsize):
-        temp2 = 0
+        bin_count = 0
         j *= binsize
         for k in range(binsize):
             # sum of all photons within one interval
-            temp2 = temp2 + lightcurve[j+k]
+            bin_count = bin_count + lightcurve[j+k]
 
         # appends that sum to a list
-        binned_photons.append(temp2)
+        binned_photons.append(bin_count)
 
     return binned_photons
 
@@ -73,7 +75,7 @@ def bin_toarrays(lightcurve, binsize):
     Returns
     -------
     list
-        Array of bins
+        Array of bins.
     """
     binned_photons = []
     binned_time = []
@@ -93,7 +95,7 @@ def bin_toarrays(lightcurve, binsize):
 
     return binned_photons
 
-def flare_detect(lc, binsize=10):
+def flare_detect(lc, binsize=10, sigma=3, threshold=0.3):
     """Detects potential flares in lightcurves.
 
     Parameters
@@ -102,6 +104,10 @@ def flare_detect(lc, binsize=10):
         ChandraLightcurve object
     binsize : int
         Items per bin, by default 10
+    sigma : float
+        Number of standard deviations of regression slope above mean of regression slopes of all bins, by default 3
+    threshold : float
+        Threshold of clustering of bins which could be part of a flare from 0 to 1, by default 0.3
 
     Returns
     -------
@@ -110,21 +116,21 @@ def flare_detect(lc, binsize=10):
     """
 
     # binsize arrays of times and cumulative counts
-    binned_time_arrays = analysis.bin_toarrays(lc.time_array, binsize)
-    binned_count_arrays = analysis.bin_toarrays(lc.cumulative_counts, binsize)
+    binned_time_arrays = bin_toarrays(lc.time_array, binsize)
+    binned_count_arrays = bin_toarrays(lc.cumulative_counts, binsize)
 
     # Array of slopes of each bin from regression line
     slopes = [ml.regression_equation(x,y)[0] for x,y in zip(binned_time_arrays, binned_count_arrays)]
 
     # Replacing nan with 0
     for i in range(len(slopes)):
-        if np.isnan(slopes(i)):
+        if np.isnan(slopes[i]):
             slopes[i] = 0
 
     # array of potential flares
-    potential_flares = [i * binsize * lc.chandra_bin for i in range(len(slopes)) if sigma_check(slopes,slopes[i])]
+    potential_flares = [i * binsize * lc.chandra_bin for i in range(len(slopes)) if ml.sigma_check(slopes, slopes[i], sigma=sigma)]
 
-    if len(check_cluster(potential_flares,binsize)) > 0:
+    if len(ml.check_cluster(potential_flares, binsize=binsize, threshold=threshold)) > 0:
         return True
 
     return False

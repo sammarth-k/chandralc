@@ -18,3 +18,5 @@ chandralc/.ipynb_checkpoints/download-checkpoint.py
 chandralc/.ipynb_checkpoints/ml-checkpoint.py
 chandralc/.ipynb_checkpoints/plot-checkpoint.py
 .ipynb_checkpoints/Untitled-checkpoint.ipynb
+*.txt
+*.jpg

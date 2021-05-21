@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 
 
 def lightcurve(lc, binning=500.0, figsize=(15, 9), rate=True, color="blue", fontsize=25,
-family="sans serif", save=False):
+family="sans serif", save=False, directory=".", show=True):
     """Plot binned lightcurves over time.
 
     Parameters
@@ -27,6 +27,10 @@ family="sans serif", save=False):
         Font family for text, by default 'sans serif'
     save : bool, optional
         Save figure or not, by default False
+    directory : str, optional
+        Directory to save figure in, by default "."
+    show : bool, optional
+        Show plot or not, by default True
     """
 
     photons_in_group = []
@@ -78,12 +82,13 @@ family="sans serif", save=False):
     if save:
         figure = plt.gcf()
         figure.savefig(
-            f"chandralc_lightcurve_{lc.coords}_{lc.obsid}_{binning}.jpg", bbox_inches='tight')
+            f"{directory}/chandralc_lightcurve_{lc.coords}_{lc.obsid}_{binning}.jpg", bbox_inches='tight')
+    if show:
+        plt.show()
+    
+    plt.close()
 
-    plt.show()
-
-
-def cumulative(lc, figsize=(15, 9), color="blue", fontsize=25, family='sans serif', save=False):
+def cumulative(lc, figsize=(15, 9), color="blue", fontsize=25, family='sans serif', save=False, directory=".", show=True):
     """Plots cumulative photon counts over time.
 
     Parameters
@@ -100,6 +105,10 @@ def cumulative(lc, figsize=(15, 9), color="blue", fontsize=25, family='sans seri
         Font family for text, by default 'sans serif'
     save : bool, optional
         Save figure or not, by default False
+    directory : str, optional
+        Directory to save figure in, by default "."
+    show : bool, optional
+        Show plot or not, by default True
     """
 
     # plotting
@@ -119,6 +128,9 @@ def cumulative(lc, figsize=(15, 9), color="blue", fontsize=25, family='sans seri
     if save:
         figure = plt.gcf()
         figure.savefig(
-            f"chandralc_cumulative_{lc.coords}_{lc.obsid}.jpg", bbox_inches='tight')
-
-    plt.show()
+            f"{directory}/chandralc_cumulative_{lc.coords}_{lc.obsid}.jpg", bbox_inches='tight')
+    
+    if show:
+        plt.show()
+    
+    plt.close()
