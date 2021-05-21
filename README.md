@@ -4,7 +4,7 @@
  
 </p>
 
-```chandralc``` is a Python package aimed at easing access to Chandra X-ray Observatory lightcurves and promoting citizen science. It includes several tools for accessing and analysing data.
+```chandralc``` is a Python package for processing Chandra X-ray Observatory (```CXO```) lightcurves and includes several functions and modules to download, plot and analyse data, It also contains algorithms to detect flares using **machine learning** and has **automation** tools to find events in a large dataset
 
 To see ```chandralc``` in action, check out <a href="https://github.com/sammarth-k/chandralc/blob/main/demo.ipynb">the demo</a>.
 
