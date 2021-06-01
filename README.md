@@ -1,12 +1,11 @@
-# chandralc
+# chandralc: Python Package for CXO Lightcurve Analysis
+
 <p align="center">
  <a href="LICENSE.txt"><img src = "https://img.shields.io/github/license/sammarth-k/chandralc?logo=MIT"></a> <a herf="https://python.org" target="_blank"><img src="https://img.shields.io/badge/Made%20with-Python-306998.svg"></a>
- 
-</p>
 
-```chandralc``` is a Python package for processing Chandra X-ray Observatory (```CXO```) lightcurves and includes several functions and modules to download, plot and analyse data, It also contains algorithms to detect flares using **machine learning** and has **automation** tools to find events in a large dataset
+``chandralc`` is a Python package for processing Chandra X-ray Observatory (``CXO``) lightcurves and includes several functions and modules to download, plot and analyse data, It also contains algorithms to detect flares using **machine learning** and has **automation** tools to find events in a large dataset
 
-To see ```chandralc``` in action, check out <a href="https://github.com/sammarth-k/chandralc/blob/main/demo.ipynb">the demo</a>.
+To see ``chandralc`` in action, check out `<a href="https://github.com/sammarth-k/chandralc/blob/main/demo.ipynb">`the demo`</a>`.
 
 ### Features:
 
@@ -32,4 +31,19 @@ To see ```chandralc``` in action, check out <a href="https://github.com/sammarth
 
 ##### Upcoming features:
 
-- Integration with <a href="https://github.com/sammarth-k/galaXy.lc"> galaXy.lc</a>
+- Integration with`<a href="https://github.com/sammarth-k/galaXy.lc">` galaXy.lc`</a>`
+
+##### Cite chandralc
+
+If you use ``chandralc`` in your research, please cite it ass follows:
+
+```
+@MISC{chandralc,
+ author = {{Kumar}, Sammarth},
+ title = "{chandralc: Python Package for CXO Lightcurve Analysis}",
+ keywords = {Software, Chandra, CXO, lightcurves },
+ howpublished = \url{https://github.com/sammarth-k/chandralc},
+ year = 2021,
+ month = may,
+}
+```

@@ -167,7 +167,7 @@ class ChandraLightcurve():
 
         return analysis.bin_lc(self.raw_phot, binsize)
     
-    def bin_toarrays(self, binsize):
+    def bin_toarrays(self, binsize=10):
         """Bins photon counts and returns an array with each bin.
 
         Parameters
@@ -182,7 +182,7 @@ class ChandraLightcurve():
         """
         return analysis.bin_toarrays(self.raw_phot, binsize)
     
-    def flare_detect(self, binsize=10, sigma=3, threshold=0.3):
+    def flare_detect(self, binsize=5, sigma=3, threshold=0.3):
         """Detects potential flares in lightcurves.
 
         Parameters
@@ -199,7 +199,7 @@ class ChandraLightcurve():
         bool
             Whether flare(s) is/are detected or not
         """
-        if ml.calculate_r(self.time_array, self.cumulative_counts)**2 <= 0.995 and self.rate_ks >= 2.5:
+        if ml.calculate_r(self.time_array, self.cumulative_counts)**2 <= 0.998:
             return analysis.flare_detect(self, binsize=binsize, sigma=sigma, threshold=threshold)
         
         return False

@@ -178,9 +178,9 @@ def check_cluster(array, binsize=10, threshold=0.3):
     bins = analysis.bin_toarrays(array, binsize)
     
     # assigns 0 or 1 to s     
-    slope_clusters = [[1 if bins[i][j] > 0 else 0 for j in range(binsize)] for i in range(len(bins))]
+    clusters = [[1 if bins[i][j] > 0 else 0 for j in range(binsize)] for i in range(len(bins))]
     
     # adds timestamps if bin meets or exceeds threshold
-    clusters = [array[i*binsize] for i in range(len(bins)) if np.sum(slope_clusters[i])/binsize >= threshold]
+    clusters = [array[i*binsize] for i in range(len(bins)) if np.sum(clusters[i])/binsize >= threshold]
             
     return clusters

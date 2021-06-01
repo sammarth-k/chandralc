@@ -141,7 +141,7 @@ def flare_detect(lc, binsize=10, sigma=3, threshold=0.3):
             slopes[i] = 0
 
     # array of potential flares
-    potential_flares = [i * binsize * lc.chandra_bin for i in range(len(slopes)) if ml.sigma_check(slopes, slopes[i], sigma=sigma)]
+    potential_flares = [i * binsize * lc.chandra_bin if ml.sigma_check(slopes, slopes[i], sigma=sigma) else 0 for i in range(len(slopes))]
 
     if len(ml.check_cluster(potential_flares, binsize=binsize, threshold=threshold)) > 0:
         return True
