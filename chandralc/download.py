@@ -43,10 +43,12 @@ def download_db():
 
         end = time.time()
 
-        t += (end-start)
+        t += end - start
 
         print(
-            f"    Progress: {count} of {len(dbs)} downloaded | Total Size: {round(size/1024,2)} KB | Time Elapsed: {round(t,2)} seconds", end="\r")
+            f"    Progress: {count} of {len(dbs)} downloaded | Total Size: {round(size/1024,2)} KB | Time Elapsed: {round(t,2)} seconds",
+            end="\r",
+        )
 
         count += 1
 
@@ -101,7 +103,7 @@ def get_galaxy(filename):
     Parameters
     ----------
     filename : str
-        Filename or filepath 
+        Filename or filepath
 
     Returns
     -------
@@ -156,8 +158,8 @@ def coordinate_search(coordinates):
         file_ra, file_dec = convert.to_deg(convert.extract_coords(file))
 
         # add file if within search radius
-        ra_check = (file_ra*0.999995 <= search_ra <= file_ra*1.000005)
-        dec_check = (file_dec*0.999995 <= search_dec <= file_dec*1.000005)
+        ra_check = file_ra * 0.999995 <= search_ra <= file_ra * 1.000005
+        dec_check = file_dec * 0.999995 <= search_dec <= file_dec * 1.000005
 
         if ra_check and dec_check:
             matching_files.append(file)
@@ -166,7 +168,7 @@ def coordinate_search(coordinates):
         count += 1
 
     # returns list of files with coordinates within the search radius
-    return(matching_files)
+    return matching_files
 
 
 # ----------------------------------------------------------
@@ -227,13 +229,16 @@ def download_lcs(filenames, directory="."):
 
             # progress meter
             end = time.time()
-            t += (end-start)
+            t += end - start
 
             print(
-                f"    Progress: {count} of {len(filenames)} downloaded | Total Size: {round(size/1048576,2)} MB | Time Elapsed: {round(t,2)} seconds", end="\r")
+                f"    Progress: {count} of {len(filenames)} downloaded | Total Size: {round(size/1048576,2)} MB | Time Elapsed: {round(t,2)} seconds",
+                end="\r",
+            )
 
             count += 1
 
         except requests.exceptions.HTTPError:
             print(
-                f"{filename}: Error 404: Page Not Found. Please make sure you have used the correct filename")
+                f"{filename}: Error 404: Page Not Found. Please make sure you have used the correct filename"
+            )

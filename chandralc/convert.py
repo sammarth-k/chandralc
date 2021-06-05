@@ -26,8 +26,9 @@ def to_deg(coordinates):
     converted_coords = SkyCoord(coordinates, unit=(u.hourangle, u.deg))
 
     # using string manipulation to extract coordinates from SkyCoord object
-    coordinates = tuple(map(float, str(converted_coords).split(
-        "deg")[1].strip(">,\n, ),(").split(", ")))
+    coordinates = tuple(
+        map(float, str(converted_coords).split("deg")[1].strip(">,\n, ),(").split(", "))
+    )
     return coordinates
 
 
@@ -52,13 +53,18 @@ def extract_coords(filename):
 
     # extracting right acesnsion (ra) and declination(dec) from filename
     filename = filename.split("_")[0].strip("J").split(plus_minus)
-    ra_extracted = ["".join(filename[0][0:2]), "".join(
-        filename[0][2:4]), "".join(filename[0][4:])]
-    dec_extracted = ["".join(filename[1][0:2]), "".join(
-        filename[1][2:4]), "".join(filename[1][4:])]
+    ra_extracted = [
+        "".join(filename[0][0:2]),
+        "".join(filename[0][2:4]),
+        "".join(filename[0][4:]),
+    ]
+    dec_extracted = [
+        "".join(filename[1][0:2]),
+        "".join(filename[1][2:4]),
+        "".join(filename[1][4:]),
+    ]
 
-    coordinates = " ".join(ra_extracted) + " " + \
-        plus_minus + " ".join(dec_extracted)
+    coordinates = " ".join(ra_extracted) + " " + plus_minus + " ".join(dec_extracted)
 
     # return coordinates as a string in HH MM SS.SSS format
     return coordinates
@@ -99,8 +105,18 @@ def txt_to_df(file, header):
         Lightcurve as a DataFrame
     """
 
-    cols = ['TIME_BIN', 'TIME_MIN', 'TIME', 'TIME_MAX', 'COUNTS',
-            'STAT_ERR', 'AREA', 'EXPOSURE', 'COUNT_RATE', 'COUNT_RATE_ERR']
+    cols = [
+        "TIME_BIN",
+        "TIME_MIN",
+        "TIME",
+        "TIME_MAX",
+        "COUNTS",
+        "STAT_ERR",
+        "AREA",
+        "EXPOSURE",
+        "COUNT_RATE",
+        "COUNT_RATE_ERR",
+    ]
 
     dataframe = pd.read_csv(file, skiprows=header, names=cols, sep=" ")
     return dataframe

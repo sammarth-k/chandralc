@@ -5,8 +5,18 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
-def lightcurve(lc, binning=500.0, figsize=(15, 9), rate=True, color="blue", fontsize=25,
-family="sans serif", save=False, directory=".", show=True):
+def lightcurve(
+    lc,
+    binning=500.0,
+    figsize=(15, 9),
+    rate=True,
+    color="blue",
+    fontsize=25,
+    family="sans serif",
+    save=False,
+    directory=".",
+    show=True,
+):
     """Plot binned lightcurves over time.
 
     Parameters
@@ -45,50 +55,64 @@ family="sans serif", save=False, directory=".", show=True):
         temp2 = 0
         for k in range(group_size):
             # sum of all photons within one interval
-            temp2 = temp2 + lc.raw_phot[j+k]
+            temp2 = temp2 + lc.raw_phot[j + k]
 
         # appends that sum to a list
         photons_in_group.append(temp2)
 
-    avg_phot = np.array(photons_in_group) / (lc.chandra_bin *
-                                             group_size) if rate else photons_in_group
+    avg_phot = (
+        np.array(photons_in_group) / (lc.chandra_bin * group_size)
+        if rate
+        else photons_in_group
+    )
 
     avg = [i for i in avg_phot for j in range(group_size)]
 
     # getting NumPy array length of the array and increasing values by 1
-    time_array = np.array(range(len(avg))) * lc.chandra_bin/1000
+    time_array = np.array(range(len(avg))) * lc.chandra_bin / 1000
 
     # customizing the plot
     plt.figure(figsize=figsize)
-    plt.rc('text', usetex=False)
-    plt.rc('font', family=family)
-    plt.xlabel(r'Time (ks)', fontsize=fontsize)
+    plt.rc("text", usetex=False)
+    plt.rc("font", family=family)
+    plt.xlabel(r"Time (ks)", fontsize=fontsize)
     if rate:
-        plt.ylabel(r'Count Rate (c/s)', fontsize=fontsize)
+        plt.ylabel(r"Count Rate (c/s)", fontsize=fontsize)
     else:
-        plt.ylabel(r'Photon Counts', fontsize=fontsize)
-    plt.rc('xtick', labelsize=30)
-    plt.rc('ytick', labelsize=22)
-    plt.title(
-        f"{binning}s Binned Lightcurve for {lc.coords} ObsID {lc.obsid}")
+        plt.ylabel(r"Photon Counts", fontsize=fontsize)
+    plt.rc("xtick", labelsize=30)
+    plt.rc("ytick", labelsize=22)
+    plt.title(f"{binning}s Binned Lightcurve for {lc.coords} ObsID {lc.obsid}")
     plt.plot(time_array, avg, color=color)
 
     # adjusting the scale of axis
     upper = np.max(avg)
 
     if not rate:
-        plt.yticks(np.arange(0, upper+1, 3))
+        plt.yticks(np.arange(0, upper + 1, 3))
 
     if save:
         figure = plt.gcf()
         figure.savefig(
-            f"{directory}/chandralc_lightcurve_{lc.coords}_{lc.obsid}_{binning}.jpg", bbox_inches='tight')
+            f"{directory}/chandralc_lightcurve_{lc.coords}_{lc.obsid}_{binning}.jpg",
+            bbox_inches="tight",
+        )
     if show:
         plt.show()
-    
+
     plt.close()
 
-def cumulative(lc, figsize=(15, 9), color="blue", fontsize=25, family='sans serif', save=False, directory=".", show=True):
+
+def cumulative(
+    lc,
+    figsize=(15, 9),
+    color="blue",
+    fontsize=25,
+    family="sans serif",
+    save=False,
+    directory=".",
+    show=True,
+):
     """Plots cumulative photon counts over time.
 
     Parameters
@@ -116,21 +140,22 @@ def cumulative(lc, figsize=(15, 9), color="blue", fontsize=25, family='sans seri
     plt.plot(lc.time_array, lc.cumulative_counts, color=color)
     plt.xlabel("Time (ks)")
     plt.ylabel("Net Photon Counts")
-    plt.title(
-        f"Cumulative Photon Count v/s Time Plot for {lc.coords} ObsID {lc.obsid}")
-    plt.rc('text', usetex=False)
-    plt.rc('font', family=family)
-    plt.xlabel(r'Time (ks)', fontsize=fontsize)
-    plt.ylabel(r'Photon Count', fontsize=fontsize)
-    plt.rc('xtick', labelsize=30)
-    plt.rc('ytick', labelsize=22)
+    plt.title(f"Cumulative Photon Count v/s Time Plot for {lc.coords} ObsID {lc.obsid}")
+    plt.rc("text", usetex=False)
+    plt.rc("font", family=family)
+    plt.xlabel(r"Time (ks)", fontsize=fontsize)
+    plt.ylabel(r"Photon Count", fontsize=fontsize)
+    plt.rc("xtick", labelsize=30)
+    plt.rc("ytick", labelsize=22)
 
     if save:
         figure = plt.gcf()
         figure.savefig(
-            f"{directory}/chandralc_cumulative_{lc.coords}_{lc.obsid}.jpg", bbox_inches='tight')
-    
+            f"{directory}/chandralc_cumulative_{lc.coords}_{lc.obsid}.jpg",
+            bbox_inches="tight",
+        )
+
     if show:
         plt.show()
-    
+
     plt.close()

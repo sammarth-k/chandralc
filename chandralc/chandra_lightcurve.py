@@ -9,7 +9,8 @@ import numpy as np
 from chandralc import convert, analysis, plot, ml
 from chandralc.download import get_galaxy
 
-class ChandraLightcurve():
+
+class ChandraLightcurve:
     """Class for lightcurve plotting and analysis.
 
     Attributes
@@ -35,7 +36,7 @@ class ChandraLightcurve():
     cumulative_counts: numpy.ndarray
         Array of cumulative photon counts
     time_array : list
-        
+
     """
 
     def __init__(self, file):
@@ -60,15 +61,15 @@ class ChandraLightcurve():
 
         # will count net counts
         self.count = 0
-        
+
         self.cumulative_counts = []
-        
+
         for raw_phot in self.raw_phot:
             self.count += raw_phot
             self.cumulative_counts.append(self.count)
-        
+
         self.cumulative_counts = np.array(self.cumulative_counts).astype(int)
-        
+
         # array for timestamps
         self.time_array = np.arange(1, len(self.raw_phot) + 1) * self.chandra_bin / 1000
         # np.array([self.chandra_bin / 1000 *
@@ -86,8 +87,18 @@ class ChandraLightcurve():
         self.coords = convert.extract_coords(self.path)
         self.galaxy = get_galaxy(self.path)
 
-    def lightcurve(self, binning=500.0, figsize=(15, 9), rate=True, color="blue",
-    fontsize=25, family="sans serif", save=False, directory=".", show=True):
+    def lightcurve(
+        self,
+        binning=500.0,
+        figsize=(15, 9),
+        rate=True,
+        color="blue",
+        fontsize=25,
+        family="sans serif",
+        save=False,
+        directory=".",
+        show=True,
+    ):
         """Plots cumulative photon counts over time.
 
         Parameters
@@ -108,11 +119,29 @@ class ChandraLightcurve():
             Show plot or not, by default True
         """
 
-        plot.lightcurve(self, binning=binning, figsize=figsize, rate=rate,
-                        color=color, fontsize=fontsize, family=family, save=save, directory=directory, show=show)
+        plot.lightcurve(
+            self,
+            binning=binning,
+            figsize=figsize,
+            rate=rate,
+            color=color,
+            fontsize=fontsize,
+            family=family,
+            save=save,
+            directory=directory,
+            show=show,
+        )
 
-    def cumulative(self, figsize=(15, 9), color="blue", fontsize=25, family='sans serif',
-    save=False, directory=".", show=True):
+    def cumulative(
+        self,
+        figsize=(15, 9),
+        color="blue",
+        fontsize=25,
+        family="sans serif",
+        save=False,
+        directory=".",
+        show=True,
+    ):
         """Plot binned lightcurves over time.
 
         Parameters
@@ -137,8 +166,16 @@ class ChandraLightcurve():
             Show plot or not, by default True
         """
 
-        plot.cumulative(self, figsize=figsize, color=color,
-                        fontsize=fontsize, family=family, save=save, directory=directory, show=show)
+        plot.cumulative(
+            self,
+            figsize=figsize,
+            color=color,
+            fontsize=fontsize,
+            family=family,
+            save=save,
+            directory=directory,
+            show=show,
+        )
 
     def psd(self, save=False, directory=".", show=True):
         """Plots power spectral density for lightcurve.
@@ -166,7 +203,7 @@ class ChandraLightcurve():
         """
 
         return analysis.bin_lc(self.raw_phot, binsize)
-    
+
     def bin_toarrays(self, binsize=10):
         """Bins photon counts and returns an array with each bin.
 
@@ -181,7 +218,7 @@ class ChandraLightcurve():
             Array of bins.
         """
         return analysis.bin_toarrays(self.raw_phot, binsize)
-    
+
     def flare_detect(self, binsize=5, sigma=3, threshold=0.3):
         """Detects potential flares in lightcurves.
 
@@ -199,8 +236,9 @@ class ChandraLightcurve():
         bool
             Whether flare(s) is/are detected or not
         """
-        if ml.calculate_r(self.time_array, self.cumulative_counts)**2 <= 0.998:
-            return analysis.flare_detect(self, binsize=binsize, sigma=sigma, threshold=threshold)
-        
+        if ml.calculate_r(self.time_array, self.cumulative_counts) ** 2 <= 0.998:
+            return analysis.flare_detect(
+                self, binsize=binsize, sigma=sigma, threshold=threshold
+            )
+
         return False
-    

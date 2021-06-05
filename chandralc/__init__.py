@@ -1,7 +1,5 @@
 from chandralc.chandra_lightcurve import *
-from chandralc.download import download_dbs
+from chandralc import download
 
 # Download Database Indices
-download_dbs()
-
-
+download.download_db()

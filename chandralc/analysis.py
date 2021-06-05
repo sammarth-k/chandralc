@@ -1,12 +1,12 @@
 """This module contains functions for lightcurve analysis."""
 
-# chandralc modules
-from chandralc import ml
-
 # dependencies
 import matplotlib.pyplot as plt
 from scipy import signal
 import numpy as np
+
+# chandralc modules
+from chandralc import ml
 
 
 def psd(lightcurve, save=False, directory=".", show=True):
@@ -30,21 +30,24 @@ def psd(lightcurve, save=False, directory=".", show=True):
 
     frequency, power = signal.periodogram(lightcurve.raw_phot)
     plt.semilogx(frequency, power)
-    plt.xlabel('frequency [Hz]')
-    plt.ylabel('PSD [V**2/Hz]')
-    
+    plt.xlabel("frequency [Hz]")
+    plt.ylabel("PSD [V**2/Hz]")
+
     if save:
         f = plt.gcf()
-        f.savefig(f"{directory}/chandralc_psd_{lightcurve.coords}_{lightcurve.obsid}.jpg", bbox_inches="tight")
-        
+        f.savefig(
+            f"{directory}/chandralc_psd_{lightcurve.coords}_{lightcurve.obsid}.jpg",
+            bbox_inches="tight",
+        )
+
     if show:
         plt.show()
-        
-    plt.close()
-    
-    return (1/frequency[list(power).index(max(power))])*3.241
 
-    
+    plt.close()
+
+    return (1 / frequency[list(power).index(max(power))]) * 3.241
+
+
 def bin_lc(lightcurve, binsize):
     """Bins photon counts.
 
@@ -63,17 +66,18 @@ def bin_lc(lightcurve, binsize):
     binned_photons = []
 
     # range: total number of df points over included bins --> temp3 of intervals
-    for j in range(0, len(lightcurve)//binsize):
+    for j in range(0, len(lightcurve) // binsize):
         bin_count = 0
         j *= binsize
         for k in range(binsize):
             # sum of all photons within one interval
-            bin_count = bin_count + lightcurve[j+k]
+            bin_count = bin_count + lightcurve[j + k]
 
         # appends that sum to a list
         binned_photons.append(bin_count)
 
     return binned_photons
+
 
 def bin_toarrays(lightcurve, binsize):
     """Bins photon counts.
@@ -94,19 +98,20 @@ def bin_toarrays(lightcurve, binsize):
     binned_time = []
 
     # range: total number of df points over included bins --> temp3 of intervals
-    for j in range(0, len(lightcurve)//binsize):
+    for j in range(0, len(lightcurve) // binsize):
         temp1 = []
         temp2 = 0
         j *= binsize
         for k in range(binsize):
             # sum of all photons within one interval
-            temp2 = lightcurve[j+k]
+            temp2 = lightcurve[j + k]
             temp1.append(temp2)
 
         # appends that sum to a list
         binned_photons.append(temp1)
 
     return binned_photons
+
 
 def flare_detect(lc, binsize=10, sigma=3, threshold=0.3):
     """Detects potential flares in lightcurves.
@@ -133,7 +138,10 @@ def flare_detect(lc, binsize=10, sigma=3, threshold=0.3):
     binned_count_arrays = bin_toarrays(lc.cumulative_counts, binsize)
 
     # Array of slopes of each bin from regression line
-    slopes = [ml.regression_equation(x,y)[0] for x,y in zip(binned_time_arrays, binned_count_arrays)]
+    slopes = [
+        ml.regression_equation(x, y)[0]
+        for x, y in zip(binned_time_arrays, binned_count_arrays)
+    ]
 
     # Replacing nan with 0
     for i in range(len(slopes)):
@@ -141,9 +149,17 @@ def flare_detect(lc, binsize=10, sigma=3, threshold=0.3):
             slopes[i] = 0
 
     # array of potential flares
-    potential_flares = [i * binsize * lc.chandra_bin if ml.sigma_check(slopes, slopes[i], sigma=sigma) else 0 for i in range(len(slopes))]
+    potential_flares = [
+        i * binsize * lc.chandra_bin
+        if ml.sigma_check(slopes, slopes[i], sigma=sigma)
+        else 0
+        for i in range(len(slopes))
+    ]
 
-    if len(ml.check_cluster(potential_flares, binsize=binsize, threshold=threshold)) > 0:
+    if (
+        len(ml.check_cluster(potential_flares, binsize=binsize, threshold=threshold))
+        > 0
+    ):
         return True
 
     return False
