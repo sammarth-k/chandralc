@@ -12,13 +12,13 @@ from chandralc import convert
 # Downloading databases
 
 # list of galaxies with extracted lightcurves
-dbs = ["M101", "M104", "M81", "M84", "M74"]
+dbs = ["M101", "M104", "M81", "M84", "M74",  "M51"]
 
 
 def download_db():
     """Download database index."""
 
-    print("    Downloading File Databases...", end="\r")
+    print("Downloading File Databases...", end="\r")
 
     if "file_dbs" in os.listdir():
         return
