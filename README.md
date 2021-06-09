@@ -31,7 +31,7 @@ To see ``chandralc`` in action, check out <a href="https://github.com/sammarth-k
 
 ##### Upcoming features:
 
-- Integration with`<a href="https://github.com/sammarth-k/galaXy.lc">` galaXy.lc`</a>`
+- Integration with <a href="https://github.com/sammarth-k/galaXy.lc"> galaXy.lc </a>
 
 ##### Cite chandralc
 
