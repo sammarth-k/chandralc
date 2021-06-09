@@ -35,7 +35,7 @@ To see ``chandralc`` in action, check out <a href="https://github.com/sammarth-k
 
 ##### Cite chandralc
 
-If you use ``chandralc`` in your research, please cite it ass follows:
+If you use ``chandralc`` in your research, please cite it as follows:
 
 ```
 @MISC{chandralc,
