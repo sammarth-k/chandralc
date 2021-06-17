@@ -3,7 +3,7 @@
 <p align="center">
  <a href="LICENSE.txt"><img src = "https://img.shields.io/github/license/sammarth-k/chandralc?logo=MIT"></a> <a herf="https://python.org" target="_blank"><img src="https://img.shields.io/badge/Made%20with-Python-306998.svg"></a> <a href="https://github.com/psf/black"><img alt="Code style: black" src="https://img.shields.io/badge/code%20style-black-000000.svg"></a>
 
-``chandralc`` is a Python package for processing Chandra X-ray Observatory (``CXO``) lightcurves and includes several functions and modules to download, plot and analyse data, It also contains algorithms to detect flares using **machine learning** and has **automation** tools to find events in a large dataset
+``chandralc`` is a Python package for processing Chandra X-ray Observatory (``CXO``) lightcurves and includes several functions and modules to download, plot and analyse data, It also contains algorithms to detect flares and eclipses using **machine learning** and has **automation** tools to find events in a large dataset
 
 To see ``chandralc`` in action, check out <a href="https://github.com/sammarth-k/chandralc/blob/main/demo.ipynb">the demo</a>.
 
