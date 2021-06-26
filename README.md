@@ -37,7 +37,7 @@ To see ``chandralc`` in action, check out <a href="https://github.com/sammarth-k
 
 If you use ``chandralc`` in your research, please cite it as follows:
 
-```
+```tex
 @MISC{chandralc,
  author = {{Kumar}, Sammarth},
  title = "{chandralc: Python Package for CXO Lightcurve Analysis}",
