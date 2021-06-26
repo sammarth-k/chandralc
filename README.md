@@ -39,11 +39,12 @@ If you use ``chandralc`` in your research, please cite it as follows:
 
 ```tex
 @MISC{chandralc,
- author = {{Kumar}, Sammarth},
- title = "{chandralc: Python Package for CXO Lightcurve Analysis}",
- keywords = {Software, Chandra, CXO, lightcurves },
- howpublished = \url{https://github.com/sammarth-k/chandralc},
- year = 2021,
- month = may,
+	author = {{Kumar}, Sammarth},
+	title = "{chandralc: Python Package for CXO Lightcurve Analysis}",
+	keywords = {Software, Chandra, CXO, lightcurves },
+	url = {https://github.com/sammarth-k/chandralc},
+	publisher = {\url{{https://github.com/sammarth-k/chandralc}}},
+	year = {2021},
+	month = {May},
 }
 ```
