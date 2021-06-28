@@ -121,7 +121,7 @@ def flare_detect(lc, binsize=10, sigma=3, threshold=0.3):
     lc : ChandraLightcurve
         ChandraLightcurve object
     binsize : int
-        Items per bin, by default 10
+        Size of bin, by default 10
     sigma : float
         Number of standard deviations of regression slope above mean of regression slopes of all bins, by default 3
     threshold : float
@@ -163,3 +163,46 @@ def flare_detect(lc, binsize=10, sigma=3, threshold=0.3):
         return True
 
     return False
+
+def eclipse_detect(lc, binsize=300):
+    """Detects potential eclipses in lightcurves.
+       
+    Parameters
+    ----------
+    lc : ChandraLightcurve
+        ChandraLightcurve object
+    binsize : int
+        Size of bin, by default 300
+    
+    Returns
+    -------
+    list
+        Array of eclipse timestamps
+    """
+    # binsize arrays of times and cumulative counts
+    binned_time_arrays = analysis.bin_toarrays(lc.time_array, binsize)
+    binned_count_arrays = analysis.bin_toarrays(lc.cumulative_counts, binsize)
+
+    # Array of slopes of each bin from regression line
+    slopes = [0 if np.isnan(ml.regression_equation(x,y)[0]) else ml.regression_equation(x,y)[0] for x,y in zip(binned_time_arrays, binned_count_arrays)]
+    
+    
+    potential_eclipses = [[]] # to store timestamps of eclipse
+    eclipse = True # to check whether an eclipse has been detected
+    index = 0 # to keep track of position in potential_eclipses
+    
+    for i in range(len(slopes)):
+        
+        if slopes[i] <= int(np.mean(slopes) - lc.rate_ks//5) * np.std(slopes):
+            
+            if eclipse == False:
+                index += 1
+                potential_eclipses.append([])
+                
+            potential_eclipses[index].append(((i+1) * binsize * lc.chandra_bin))
+            eclipse = True
+            
+        else:
+            eclipse = False 
+            
+    return [cluster for cluster in potential_eclipses if len(cluster) > 1]

@@ -17,11 +17,11 @@ dbs = ["M101", "M104", "M81", "M84", "M74",  "M51"]
 
 def download_db():
     """Download database index."""
-
-    print("Downloading File Databases...", end="\r")
-
+    
     if "file_dbs" in os.listdir():
         return
+
+    print("Downloading File Databases...", end="\r")
 
     os.mkdir("./file_dbs")
 
@@ -46,7 +46,7 @@ def download_db():
         t += end - start
 
         print(
-            f"    Progress: {count} of {len(dbs)} downloaded | Total Size: {round(size/1024,2)} KB | Time Elapsed: {round(t,2)} seconds",
+            f"Progress: {count} of {len(dbs)} downloaded | Total Size: {round(size/1024,2)} KB | Time Elapsed: {round(t,2)} seconds",
             end="\r",
         )
 

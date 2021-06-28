@@ -72,13 +72,17 @@ class ChandraLightcurve:
 
         # array for timestamps
         self.time_array = np.arange(1, len(self.raw_phot) + 1) * self.chandra_bin / 1000
+                
         # np.array([self.chandra_bin / 1000 *
         #                           i for i in range(1, len(self.raw_phot) + 1)])
 
         # Lightcurve stats
-        self.time = round(self.time_array[-1], 3)
+        try:
+            self.time = round(self.time_array[-1], 3)
+        except:
+            self.time = 0.0000001
         self.rate_ks = round(self.count / self.time, 3)
-        self.rate_s = round(self.count / (self.time * 1000), 5)
+        self.rate_s = self.rate_ks/1000
 
         # Source information
         file = file.split("_lc.fits")[0].split("_")
