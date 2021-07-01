@@ -20,3 +20,28 @@ chandralc/.ipynb_checkpoints/plot-checkpoint.py
 .ipynb_checkpoints/Untitled-checkpoint.ipynb
 *.txt
 *.jpg
+.ipynb_checkpoints/Transit1-checkpoint.ipynb
+.ipynb_checkpoints/testing-checkpoint.ipynb
+.ipynb_checkpoints/sources studied-checkpoint.ipynb
+.ipynb_checkpoints/main-checkpoint.ipynb
+.ipynb_checkpoints/long-term-lightcurve-checkpoint.ipynb
+.ipynb_checkpoints/histogram-count-rate-checkpoint.ipynb
+.ipynb_checkpoints/fluxvsdays-checkpoint.png
+.ipynb_checkpoints/extract lightcurves-checkpoint.md
+.ipynb_checkpoints/eclipsing-binaries-checkpoint.ipynb
+.ipynb_checkpoints/eclipse-algo-checkpoint.ipynb
+.ipynb_checkpoints/data-checkpoint.csv
+data.dat
+eclipse-algo.ipynb
+eclipsing-binaries.ipynb
+file_dbs/.ipynb_checkpoints/M104-checkpoint.csv
+file_dbs/.ipynb_checkpoints/M81-checkpoint.csv
+files.dat
+fluxvsdays.png
+histogram-count-rate.ipynb
+long-term-lightcurve.ipynb
+sources studied.ipynb
+testing.ipynb
+testing/M104/.ipynb_checkpoints/Eclipse_M104_J123959.069-113720.03_1586_lc_ascii.txt-checkpoint.png
+time.dat
+Transit1.ipynb

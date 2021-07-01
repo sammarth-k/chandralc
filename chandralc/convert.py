@@ -83,10 +83,9 @@ def header_check(file):
     int
         1 if header is present 0 if not
     """
-    file = open(file, "r", encoding="utf-8")
-    result = file.read(1).isalpha()
-    file.close()
-    return int(result)
+    with open(file, "r", encoding="utf-8") as to_check:
+        result = to_check.read(1).isalpha()
+        return int(result)
 
 
 def txt_to_df(file, header):
@@ -152,6 +151,5 @@ def fits_to_df(file, header):
     # writing to dataframe
     for col in cols:
         dataframe[col] = list(evt_data[col])
-        # exec(f"df['{col}']=list(evt_data['{col}'])")
 
     return dataframe

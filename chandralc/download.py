@@ -12,21 +12,19 @@ from chandralc import convert
 # Downloading databases
 
 # list of galaxies with extracted lightcurves
-dbs = ["M101", "M104", "M81", "M84", "M74",  "M51"]
+dbs = ["M101", "M104", "M81", "M84", "M74", "M51"]
 
 
 def download_db():
     """Download database index."""
-    
+
     if "file_dbs" in os.listdir():
         return
-
-    print("Downloading File Databases...", end="\r")
 
     os.mkdir("./file_dbs")
 
     count = 1
-    t = 0
+    total_time = 0
     size = 0
 
     for db in dbs:
@@ -35,18 +33,17 @@ def download_db():
         url = f"https://raw.githubusercontent.com/sammarth-k/Chandra-Lightcurve-Download/main/file_dbs/{db}.csv"
         data = requests.get(url)
 
-        file = open(f"./file_dbs/{db}.csv", "w", encoding="utf-8")
-        file.write(data.text)
-        file.close()
+        with open(f"./file_dbs/{db}.csv", "w", encoding="utf-8") as file:
+            file.write(data.text)
 
         size += len(data.text)
 
         end = time.time()
 
-        t += end - start
+        total_time += end - start
 
         print(
-            f"Progress: {count} of {len(dbs)} downloaded | Total Size: {round(size/1024,2)} KB | Time Elapsed: {round(t,2)} seconds",
+            f"Progress: {count} of {len(dbs)} downloaded | Total Size: {round(size/1024,2)} KB | Time Elapsed: {round(total_time,2)} seconds",
             end="\r",
         )
 
@@ -185,9 +182,6 @@ def download_lcs(filenames, directory="."):
     directory : str, optional
         Output directory of downloaded files, by default "."
     """
-
-    import requests
-    import time
 
     # variables for time and size
     t = 0

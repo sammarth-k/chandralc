@@ -34,8 +34,8 @@ def psd(lightcurve, save=False, directory=".", show=True):
     plt.ylabel("PSD [V**2/Hz]")
 
     if save:
-        f = plt.gcf()
-        f.savefig(
+        figure = plt.gcf()
+        figure.savefig(
             f"{directory}/chandralc_psd_{lightcurve.coords}_{lightcurve.obsid}.jpg",
             bbox_inches="tight",
         )
@@ -95,7 +95,7 @@ def bin_toarrays(lightcurve, binsize):
         Array of bins.
     """
     binned_photons = []
-    binned_time = []
+    # binned_time = []
 
     # range: total number of df points over included bins --> temp3 of intervals
     for j in range(0, len(lightcurve) // binsize):
@@ -164,45 +164,59 @@ def flare_detect(lc, binsize=10, sigma=3, threshold=0.3):
 
     return False
 
+
 def eclipse_detect(lc, binsize=300):
-    """Detects potential eclipses in lightcurves.
-       
+    """Checks for eclipses in files.
+
     Parameters
     ----------
     lc : ChandraLightcurve
         ChandraLightcurve object
     binsize : int
         Size of bin, by default 300
-    
+
     Returns
     -------
     list
-        Array of eclipse timestamps
+        2D array of eclipse timestamps
     """
+
     # binsize arrays of times and cumulative counts
-    binned_time_arrays = analysis.bin_toarrays(lc.time_array, binsize)
-    binned_count_arrays = analysis.bin_toarrays(lc.cumulative_counts, binsize)
+    binned_time_arrays = bin_toarrays(lc.time_array, binsize)
+    binned_count_arrays = bin_toarrays(lc.cumulative_counts, binsize)
 
     # Array of slopes of each bin from regression line
-    slopes = [0 if np.isnan(ml.regression_equation(x,y)[0]) else ml.regression_equation(x,y)[0] for x,y in zip(binned_time_arrays, binned_count_arrays)]
-    
-    
-    potential_eclipses = [[]] # to store timestamps of eclipse
-    eclipse = True # to check whether an eclipse has been detected
-    index = 0 # to keep track of position in potential_eclipses
-    
+    slopes = [
+        ml.regression_equation(x, y)[0]
+        for x, y in zip(binned_time_arrays, binned_count_arrays)
+    ]
+
+    # Replacing nan with 0
     for i in range(len(slopes)):
-        
-        if slopes[i] <= int(np.mean(slopes) - lc.rate_ks//5) * np.std(slopes):
-            
-            if eclipse == False:
+        if np.isnan(slopes[i]):
+            slopes[i] = 0
+
+    # finding clusters of eclipse candidates
+    potential_eclipses = [[]]
+    eclipse = True
+    index = 0
+
+    threshold = 1 if lc.rate_ks < 5 else 2
+
+    threshold = 2  # np.mean(slopes) - threshold * np.std(slopes)
+
+    for i in range(len(slopes)):
+
+        if slopes[i] <= 2:
+
+            if eclipse is False:
                 index += 1
                 potential_eclipses.append([])
-                
-            potential_eclipses[index].append(((i+1) * binsize * lc.chandra_bin))
+
+            potential_eclipses[index].append(i * binsize * lc.chandra_bin)
             eclipse = True
-            
+
         else:
-            eclipse = False 
-            
+            eclipse = False
+
     return [cluster for cluster in potential_eclipses if len(cluster) > 1]

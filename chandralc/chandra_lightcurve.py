@@ -20,7 +20,7 @@ class ChandraLightcurve:
     df: pandas.core.frame.DataFrame
         DataFrame of lightcurve
     time: float
-        Total observation time
+        Total observation time (kiloseconds)
     count: float
         Net photon counts of observation
     rate_ks: float
@@ -36,7 +36,7 @@ class ChandraLightcurve:
     cumulative_counts: numpy.ndarray
         Array of cumulative photon counts
     time_array : list
-
+        Array of time intervals
     """
 
     def __init__(self, file):
@@ -72,7 +72,7 @@ class ChandraLightcurve:
 
         # array for timestamps
         self.time_array = np.arange(1, len(self.raw_phot) + 1) * self.chandra_bin / 1000
-                
+
         # np.array([self.chandra_bin / 1000 *
         #                           i for i in range(1, len(self.raw_phot) + 1)])
 
@@ -82,7 +82,7 @@ class ChandraLightcurve:
         except:
             self.time = 0.0000001
         self.rate_ks = round(self.count / self.time, 3)
-        self.rate_s = self.rate_ks/1000
+        self.rate_s = self.rate_ks / 1000
 
         # Source information
         file = file.split("_lc.fits")[0].split("_")
@@ -192,36 +192,81 @@ class ChandraLightcurve:
 
         return analysis.psd(self, save=save, directory=directory, show=show)
 
-    def bin_lc(self, binsize):
-        """Bins photon counts and returns an array of net counts per bin.
+    def running_average(
+        self,
+        plusminus=2,
+        binning=1000.0,
+        figsize=(15, 9),
+        rate=True,
+        color="blue",
+        fontsize=25,
+        family="sans serif",
+        save=False,
+        directory=".",
+        show=True,
+    ):
+
+        """Plots running average over binned lightcurve.
 
         Parameters
         ----------
+        lc: ChandraLightcurve
+            ChandraLightcurve object
+        plusminus: int
+            Number of bins before and after current bin
+        binning : float, optional
+            Binning in seconds, by default 1000.0
+        figsize : tuple, optional
+            Size of figure in inches (length, breadth), by default (15, 9)
+        rate : bool, optional
+            Choose whether to plot count rate or net counts per bin on y-axis, by default True
+        fontsize : int, optional
+            Fontsize of tick labels, by default 25
+        family : str, optional
+            Font family for text, by default 'sans serif'
+        save : bool, optional
+            Save figure or not, by default False
+        directory : str, optional
+            Directory to save figure in, by default "."
+        show : bool, optional
+            Show plot or not, by default True
+        """
+        plot.running_average(
+            self,
+            binning=binning,
+            plusminus=plusminus,
+            figsize=figsize,
+            rate=rate,
+            color=color,
+            fontsize=fontsize,
+            family=family,
+            save=save,
+            directory=directory,
+            show=show,
+        )
+
+    def eclipse_detect(self, binsize=300, rate_threshold=5, time_threshold=10):
+        """Checks for eclipses in files.
+
+        Parameters
+        ----------
+        lc : ChandraLightcurve
+            ChandraLightcurve object
         binsize : int
-            Size of bin
+            Size of bin, by default 300
+        rate_threshold : int
+            Minimum kilosecond count rate, by default 5
+        time_threshold : int
+            Minimum observation length (in kiloseconds), by default 10
 
         Returns
         -------
         list
-            Array of net counts per bin.
+            2D array of eclipse timestamps
         """
 
-        return analysis.bin_lc(self.raw_phot, binsize)
-
-    def bin_toarrays(self, binsize=10):
-        """Bins photon counts and returns an array with each bin.
-
-        Parameters
-        ----------
-        binsize : int
-            Size of bin
-
-        Returns
-        -------
-        list
-            Array of bins.
-        """
-        return analysis.bin_toarrays(self.raw_phot, binsize)
+        if lc.rate_ks >= rate_threshold and lc.time >= time_threshold:
+            analysis.eclipse_detect(self, binsize=binsize)
 
     def flare_detect(self, binsize=5, sigma=3, threshold=0.3):
         """Detects potential flares in lightcurves.
