@@ -9,24 +9,28 @@ To see ``chandralc`` in action, check out <a href="https://github.com/sammarth-k
 
 ### Features:
 
-##### Downloads:
+#### Downloads:
 
 - Large database of over 76,000 files
 - Downloading extracted lightcurves from multiple galaxies.
 - Search for lightcurves with J2000 coordinates
 - Retrieve galaxy from lightcurve file names
 
-##### Analysis:
+#### Analysis:
 
-- Observation details:total counts, observation time, count rate (kilosecond, seconds)
-- Source details: coordinates, ObsID, galaxy
+##### Observation Details
+- Total counts
+- Observation time
+- Count rate (kilosecond, seconds)
+- Source coordinates, ObsID, galaxy
+	
+#### Plots
 - Cumulative Count plots over time to view net counts over time
 - Lightcurves with custom binning to view data in the form of count rate per bin or net counts per bin over time.
-- Retrieve raw data in the form of a Pandas DataFrame or arrays.
-- Power Spectral Density (PSD) to identify periodicity and their time periods/frequencies
+- Power Spectral Density (PSD) to identify periodicity and their time periods/frequencies.
+- Running Averages
 
 #### Feature Detection
-
 - Flares
 - Eclipses
 
