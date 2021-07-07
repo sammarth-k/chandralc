@@ -6,7 +6,7 @@
 import numpy as np
 
 # User made modules
-from chandralc import convert, analysis, plot, ml
+from chandralc import convert, analysis, plot, ml, algos
 from chandralc.download import get_galaxy
 
 
@@ -237,7 +237,6 @@ class ChandraLightcurve:
             plusminus=plusminus,
             figsize=figsize,
             rate=rate,
-            color=color,
             fontsize=fontsize,
             family=family,
             save=save,
@@ -265,8 +264,8 @@ class ChandraLightcurve:
             2D array of eclipse timestamps
         """
 
-        if lc.rate_ks >= rate_threshold and lc.time >= time_threshold:
-            analysis.eclipse_detect(self, binsize=binsize)
+        if self.rate_ks >= rate_threshold and self.time >= time_threshold:
+            algos.eclipse_detect(self, binsize=binsize)
 
     def flare_detect(self, binsize=5, sigma=3, threshold=0.3):
         """Detects potential flares in lightcurves.
@@ -286,7 +285,7 @@ class ChandraLightcurve:
             Whether flare(s) is/are detected or not
         """
         if ml.calculate_r(self.time_array, self.cumulative_counts) ** 2 <= 0.998:
-            return analysis.flare_detect(
+            return algos.flare_detect(
                 self, binsize=binsize, sigma=sigma, threshold=threshold
             )
 
