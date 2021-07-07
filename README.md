@@ -11,7 +11,7 @@ To see ``chandralc`` in action, check out <a href="https://github.com/sammarth-k
 
 ##### Downloads:
 
-- Large database of over 75,000 files
+- Large database of over 76,000 files
 - Downloading extracted lightcurves from multiple galaxies.
 - Search for lightcurves with J2000 coordinates
 - Retrieve galaxy from lightcurve file names
@@ -25,9 +25,10 @@ To see ``chandralc`` in action, check out <a href="https://github.com/sammarth-k
 - Retrieve raw data in the form of a Pandas DataFrame or arrays.
 - Power Spectral Density (PSD) to identify periodicity and their time periods/frequencies
 
-#### Machine Learning
+#### Feature Detection
 
-- Predict whether one or more flares occur in a lightcurve or not
+- Flares
+- Eclipses
 
 ##### Upcoming features:
 
