@@ -12,7 +12,7 @@ from chandralc import convert
 # Downloading databases
 
 # list of galaxies with extracted lightcurves
-dbs = ["M101", "M104", "M81", "M84", "M74", "M51", "NGC1399", "M87"]
+dbs = ["M101", "M104", "M81", "M84", "M74", "M51", "NGC1399", "NGC5128", "M87", "M83", "M49"]
 
 
 def download_db():
