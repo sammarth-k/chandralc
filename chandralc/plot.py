@@ -17,6 +17,7 @@ def lightcurve(
     save=False,
     directory=".",
     show=True,
+    timespan=False
 ):
     """Plot binned lightcurves over time.
 
@@ -42,6 +43,8 @@ def lightcurve(
         Directory to save figure in, by default "."
     show : bool, optional
         Show plot or not, by default True
+    timespan: bool/tuple
+        range of x axis (kiloseconds), by default False
     """
 
     photons_in_group = []
@@ -94,6 +97,9 @@ def lightcurve(
 
     if not rate:
         plt.yticks(np.arange(0, upper + 1, 3))
+        
+    if timespan is not False:
+        plt.xlim(timespan[0], timespan[1])
 
     if save:
         figure = plt.gcf()

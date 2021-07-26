@@ -19,7 +19,38 @@ def download_db():
     """Download database index."""
 
     if "file_dbs" in os.listdir():
+        count = 1
+        total_time = 0
+        size = 0
+    
+        for db in dbs:
+            
+            if f"{db}.csv" not in os.listdir("./file_dbs"):
+                
+                start = time.time()
+
+                url = f"https://raw.githubusercontent.com/sammarth-k/Chandra-Lightcurve-Download/main/file_dbs/{db}.csv"
+                data = requests.get(url)
+
+                with open(f"./file_dbs/{db}.csv", "w", encoding="utf-8") as file:
+                    file.write(data.text)
+
+                size += len(data.text)
+
+                end = time.time()
+
+                total_time += end - start
+
+                print(
+                    f"Progress: {count} of {len(dbs)} downloaded | Total Size: {round(size/1024,2)} KB | Time Elapsed: {round(total_time,2)} seconds",
+                    end="\r",
+                )
+
+            count += 1
+            
         return
+    
+    # if file_dbs does not exist
 
     os.mkdir("./file_dbs")
 
@@ -70,6 +101,8 @@ def get_files(galaxy):
     # returns list of filenames
     files = [filename.strip("\n") for filename in filenames.readlines()]
     filenames.close()
+    
+    # returns array of all files
     return files
 
 
