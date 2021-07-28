@@ -13,8 +13,8 @@ To see ``chandralc`` in action, check out <a href="https://github.com/sammarth-k
 
 #### Downloads:
 
-- Large database of over 76,000 files
-- Downloading extracted lightcurves from multiple galaxies.
+- Large database of over 100,000 files
+- Downloading extracted lightcurves from 13+ galaxies.
 - Search for lightcurves with J2000 coordinates
 - Retrieve galaxy from lightcurve file names
 
