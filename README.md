@@ -24,7 +24,9 @@ To see ``chandralc`` in action, check out <a href="https://github.com/sammarth-k
 - Total counts
 - Observation time
 - Count rate (kilosecond, seconds)
-- Source coordinates, ObsID, galaxy
+- Source coordinates
+- ObsID
+- Galaxy (Messier or NGC)
 	
 #### Plots
 - Cumulative Count plots over time to view net counts over time
@@ -39,6 +41,7 @@ To see ``chandralc`` in action, check out <a href="https://github.com/sammarth-k
 ##### Upcoming features:
 
 - Integration with <a href="https://github.com/sammarth-k/galaXy.lc"> galaXy.lc </a>
+- VizeR and NASA ADS connection
 
 ### Installation
 
