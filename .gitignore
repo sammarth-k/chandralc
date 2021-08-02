@@ -45,3 +45,11 @@ testing.ipynb
 testing/M104/.ipynb_checkpoints/Eclipse_M104_J123959.069-113720.03_1586_lc_ascii.txt-checkpoint.png
 time.dat
 Transit1.ipynb
+file_dbs/.ipynb_checkpoints/LMC-checkpoint.csv
+test/.ipynb_checkpoints/eggs-checkpoint.csv
+test/.ipynb_checkpoints/Untitled-checkpoint.ipynb
+test/.ipynb_checkpoints/file-checkpoint.csv
+test/eggs.csv
+test/file.csv
+*.png
+extract lightcurves.md
