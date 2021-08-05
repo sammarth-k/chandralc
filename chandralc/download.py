@@ -12,8 +12,10 @@ from chandralc import convert
 # Downloading databases
 
 # list of galaxies with extracted lightcurves
-dbs = ['M101', 'M104', 'M31', 'M49', 'M51', 'M74', 'M81', 'M83', 'M84', 'M87', 'NGC1399', 'NGC5128', 'NGC6946', 'LMC', 'SMC']
+dbs1 = ['M101', 'M104', 'M31', 'M49', 'M51', 'M74', 'M81', 'M83', 'M84', 'M87', 'NGC1399', 'NGC5128', 'NGC6946', 'LMC', 'SMC']
+dbs2 = ['NGC4736','M82']
 
+repos = [dbs1, dbs2]
 
 def download_db():
     """Download database index."""
@@ -23,32 +25,34 @@ def download_db():
         total_time = 0
         size = 0
     
-        for db in dbs:
-            
-            if f"{db}.csv" not in os.listdir("./file_dbs"):
+        for repo in repos:
+        
+            for db in repo:
                 
-                start = time.time()
+                if f"{db}.csv" not in os.listdir("./file_dbs"):
+                    
+                    start = time.time()
 
-                url = f"https://raw.githubusercontent.com/sammarth-k/Chandra-Lightcurve-Download/main/file_dbs/{db}.csv"
-                data = requests.get(url)
+                    url = f"https://raw.githubusercontent.com/sammarth-k/Chandra-Lightcurve-Download/main/file_dbs/{db}.csv"
+                    data = requests.get(url)
 
-                with open(f"./file_dbs/{db}.csv", "w", encoding="utf-8") as file:
-                    file.write(data.text)
+                    with open(f"./file_dbs/{db}.csv", "w", encoding="utf-8") as file:
+                        file.write(data.text)
 
-                size += len(data.text)
+                    size += len(data.text)
 
-                end = time.time()
+                    end = time.time()
 
-                total_time += end - start
+                    total_time += end - start
 
-                print(
-                    f"Progress: {count} of {len(dbs)} downloaded | Total Size: {round(size/1024,2)} KB | Time Elapsed: {round(total_time,2)} seconds",
-                    end="\r",
-                )
+                    print(
+                        f"Progress: {count} of {len(dbs)} downloaded | Total Size: {round(size/1024,2)} KB | Time Elapsed: {round(total_time,2)} seconds",
+                        end="\r",
+                    )
 
-            count += 1
+                count += 1
             
-        return
+            return
     
     # if file_dbs does not exist
 
@@ -57,28 +61,31 @@ def download_db():
     count = 1
     total_time = 0
     size = 0
+    
+    for repo in repos:
+    
+        for db in repo:
+        
+            start = time.time()
 
-    for db in dbs:
-        start = time.time()
+            url = f"https://raw.githubusercontent.com/sammarth-k/Chandra-Lightcurve-Download/main/file_dbs/{db}.csv"
+            data = requests.get(url)
 
-        url = f"https://raw.githubusercontent.com/sammarth-k/Chandra-Lightcurve-Download/main/file_dbs/{db}.csv"
-        data = requests.get(url)
+            with open(f"./file_dbs/{db}.csv", "w", encoding="utf-8") as file:
+                file.write(data.text)
 
-        with open(f"./file_dbs/{db}.csv", "w", encoding="utf-8") as file:
-            file.write(data.text)
+            size += len(data.text)
 
-        size += len(data.text)
+            end = time.time()
 
-        end = time.time()
+            total_time += end - start
 
-        total_time += end - start
+            print(
+                f"Progress: {count} of {len([db for repo in repos for db in repo])} downloaded | Total Size: {round(size/1024,2)} KB | Time Elapsed: {round(total_time,2)} seconds",
+                end="\r",
+            )
 
-        print(
-            f"Progress: {count} of {len(dbs)} downloaded | Total Size: {round(size/1024,2)} KB | Time Elapsed: {round(total_time,2)} seconds",
-            end="\r",
-        )
-
-        count += 1
+            count += 1
 
 
 def get_files(galaxy):
@@ -118,10 +125,11 @@ def get_all_files():
     files = []
 
     # iterate through list of galaxies
-    for db in dbs:
+    repo in repos:
+        for db in repo:
 
-        # create a list of all available extracted lightcurves
-        files += get_files(db)
+            # create a list of all available extracted lightcurves
+            files += get_files(db)
 
     # returns a list of all available extracted lightcurves
     return files
@@ -144,12 +152,14 @@ def get_galaxy(filename):
     # in case path is entered as argument
     filename = filename.split("/")[-1] if "/" in filename else filename
 
-    for db in dbs:
+    for repo in repos:
+    
+        for db in repo:
 
-        filenames = get_files(db)
+            filenames = get_files(db)
 
-        if filename in filenames:
-            return db
+            if filename in filenames:
+                return db
 
     print("File not present in available extracted lightcurves")
 
@@ -232,12 +242,17 @@ def download_lcs(filenames, directory="."):
 
         # timer
         start = time.time()
-
+        
         # to get galaxy of file
         galaxy = get_galaxy(filename)
 
+        # getting repo number 
+        for i in range(len(repos)):
+            if galaxy in repos[i]:
+                repo_num = i + 1
+        
         # url of lightcurve
-        url = f"https://raw.githubusercontent.com/sammarth-k/CXO-lightcurves/main/{galaxy}/textfiles/{filename}"
+        url = f"https://raw.githubusercontent.com/sammarth-k/CXO-lightcurves{repo_num}/main/{galaxy}/textfiles/{filename}"
 
         # using a GET request to download lightcurve
         try:
