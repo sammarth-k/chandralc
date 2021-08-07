@@ -1,4 +1,4 @@
-"""This module contains functions for conversion of coordinates and files"""
+"""This module contains functions for conversion of coordinates and file formats"""
 
 # dependencies
 from astropy.coordinates import SkyCoord

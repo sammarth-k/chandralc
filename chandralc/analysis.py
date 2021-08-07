@@ -1,13 +1,12 @@
 """This module contains functions for lightcurve analysis."""
 
-# chandralc modules
-from chandralc import ml
-
 # dependencies
 import matplotlib.pyplot as plt
 from scipy import signal
 import numpy as np
 
+# chandralc modules
+from chandralc import ml
 
 def psd(lightcurve, save=False, directory=".", show=True):
     """Plots power spectral density for lightcurve.

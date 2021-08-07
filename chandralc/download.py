@@ -1,9 +1,9 @@
-# Python Standard Library Modules
-import os
-import requests
-import time
+"""This module contains functions to download data from the online locations."""
 
-# User modules
+# Python Standard Library Modules
+import os, csv, time, requests
+
+# chandralc modules
 from chandralc import convert
 
 # ----------------------------------------------------------
@@ -12,10 +12,27 @@ from chandralc import convert
 # Downloading databases
 
 # list of galaxies with extracted lightcurves
-dbs1 = ['M101', 'M104', 'M31', 'M49', 'M51', 'M74', 'M81', 'M83', 'M84', 'M87', 'NGC1399', 'NGC5128', 'NGC6946', 'LMC', 'SMC']
-dbs2 = ['NGC4736','M82']
+dbs1 = [
+    "M101",
+    "M104",
+    "M31",
+    "M49",
+    "M51",
+    "M74",
+    "M81",
+    "M83",
+    "M84",
+    "M87",
+    "NGC1399",
+    "NGC5128",
+    "NGC6946",
+    "LMC",
+    "SMC",
+]
+dbs2 = ["NGC4736", "NGC1313", "M82"]
 
 repos = [dbs1, dbs2]
+
 
 def download_db():
     """Download database index."""
@@ -24,13 +41,13 @@ def download_db():
         count = 1
         total_time = 0
         size = 0
-    
+
         for repo in repos:
-        
+
             for db in repo:
-                
+
                 if f"{db}.csv" not in os.listdir("./file_dbs"):
-                    
+
                     start = time.time()
 
                     url = f"https://raw.githubusercontent.com/sammarth-k/Chandra-Lightcurve-Download/main/file_dbs/{db}.csv"
@@ -51,9 +68,9 @@ def download_db():
                     )
 
                 count += 1
-            
+
             return
-    
+
     # if file_dbs does not exist
 
     os.mkdir("./file_dbs")
@@ -61,11 +78,11 @@ def download_db():
     count = 1
     total_time = 0
     size = 0
-    
+
     for repo in repos:
-    
+
         for db in repo:
-        
+
             start = time.time()
 
             url = f"https://raw.githubusercontent.com/sammarth-k/Chandra-Lightcurve-Download/main/file_dbs/{db}.csv"
@@ -103,12 +120,9 @@ def get_files(galaxy):
     """
 
     # opening database of filenames for the particular galaxy
-    filenames = open(f"./file_dbs/{galaxy}.csv", "r")
+    with open(f"./file_dbs/{galaxy}.csv", "r") as fnames:
+        files = [file[0] for file in csv.reader(fnames)]
 
-    # returns list of filenames
-    files = [filename.strip("\n") for filename in filenames.readlines()]
-    filenames.close()
-    
     # returns array of all files
     return files
 
@@ -125,7 +139,7 @@ def get_all_files():
     files = []
 
     # iterate through list of galaxies
-    repo in repos:
+    for repo in repos:
         for db in repo:
 
             # create a list of all available extracted lightcurves
@@ -136,7 +150,7 @@ def get_all_files():
 
 
 def get_galaxy(filename):
-    """Get name of galaxy a file belongs to.j
+    """Get name of galaxy a file belongs to.
 
     Parameters
     ----------
@@ -153,7 +167,7 @@ def get_galaxy(filename):
     filename = filename.split("/")[-1] if "/" in filename else filename
 
     for repo in repos:
-    
+
         for db in repo:
 
             filenames = get_files(db)
@@ -242,15 +256,15 @@ def download_lcs(filenames, directory="."):
 
         # timer
         start = time.time()
-        
+
         # to get galaxy of file
         galaxy = get_galaxy(filename)
 
-        # getting repo number 
+        # getting repo number
         for i in range(len(repos)):
             if galaxy in repos[i]:
                 repo_num = i + 1
-        
+
         # url of lightcurve
         url = f"https://raw.githubusercontent.com/sammarth-k/CXO-lightcurves{repo_num}/main/{galaxy}/textfiles/{filename}"
 

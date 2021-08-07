@@ -1,4 +1,4 @@
-"""Algorithms for eclipse and flare detection."""
+"""Algorithms for eclipse and flare state detection."""
 
 # Dependencies
 import numpy as np
@@ -97,7 +97,7 @@ def eclipse_detect(lc, binsize=300):
 
         if slopes[i] <= 1:
 
-            if eclipse == False:
+            if eclipse is False:
                 index += 1
                 potential_eclipses.append([])
 
@@ -108,3 +108,6 @@ def eclipse_detect(lc, binsize=300):
             eclipse = False
 
     return [cluster for cluster in potential_eclipses if len(cluster) > 1]
+
+
+# Adding WWZ test n stuff

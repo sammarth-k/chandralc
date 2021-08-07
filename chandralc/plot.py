@@ -1,6 +1,6 @@
-"""This module contains functions to plot lightcuves."""
+"""This module contains functions to plot lightcurves in different ways."""
 
-# Dependencies numpy as np
+# Dependencies
 import matplotlib.pyplot as plt
 import numpy as np
 import warnings
@@ -17,7 +17,7 @@ def lightcurve(
     save=False,
     directory=".",
     show=True,
-    timespan=False
+    timespan=False,
 ):
     """Plot binned lightcurves over time.
 
@@ -97,7 +97,7 @@ def lightcurve(
 
     if not rate:
         plt.yticks(np.arange(0, upper + 1, 3))
-        
+
     if timespan is not False:
         plt.xlim(timespan[0], timespan[1])
 
