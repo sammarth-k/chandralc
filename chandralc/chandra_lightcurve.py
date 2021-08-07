@@ -5,10 +5,15 @@
 # External Modules
 import numpy as np
 
-# User made modules
-from chandralc import convert, analysis, plot, ml, algos
-from chandralc.download import get_galaxy
+# chandralc modules
+from chandralc import convert
+from chandralc import analysis
+from chandralc import plot
+from chandralc import ml
+from chandralc import states
 
+# specific function
+from chandralc.download import get_galaxy
 
 class ChandraLightcurve:
     """Class for lightcurve plotting and analysis.
@@ -90,7 +95,9 @@ class ChandraLightcurve:
         self.obsid = file[1]
         self.coords = convert.extract_coords(self.path)
         self.galaxy = get_galaxy(self.path)
-
+    
+    ### GENERAL PLOTTING ###
+    
     def lightcurve(
         self,
         binning=500.0,
@@ -186,6 +193,64 @@ class ChandraLightcurve:
             show=show,
         )
 
+    ### STATE DETECTION ###
+    
+    # ECLIPSES
+    def eclipse_detect(self, binsize=300, rate_threshold=4, time_threshold=10):
+        """Checks for eclipses in files.
+
+        Parameters
+        ----------
+        lc : ChandraLightcurve
+            ChandraLightcurve object
+        binsize : int
+            Size of bin, by default 300
+        rate_threshold : int
+            Minimum kilosecond count rate, by default 5
+        time_threshold : int
+            Minimum observation length (in kiloseconds), by default 10
+
+        Returns
+        -------
+        list
+            2D array of eclipse timestamps
+        """
+
+        if self.rate_ks >= rate_threshold and self.time >= time_threshold:
+            if len(states.eclipse_detect(self, binsize=binsize)) > 0:
+                return True
+    
+    def eclipse_mark(self):
+        '''Flags eclipses in lightcurves and marks them.'''
+        
+        states.eclipse_mark(self)
+            
+    # FLARES
+    def flare_detect(self, binsize=5, sigma=3, threshold=0.3):
+        """Detects potential flares in lightcurves.
+
+        Parameters
+        ----------
+        binsize : int
+            Items per bin, by default 10
+        sigma : float
+            Number of standard deviations of regression slope above mean of regression slopes of all bins, by default 3
+        threshold : float
+            Threshold of clustering of bins which could be part of a flare from 0 to 1, by default 0.3
+
+        Returns
+        -------
+        bool
+            Whether flare(s) is/are detected or not
+        """
+        if ml.calculate_r(self.time_array, self.cumulative_counts) ** 2 <= 0.998:
+            if len(states.flare_detect(self, binsize=binsize, sigma=sigma, threshold=threshold)) > 0:
+                return True
+
+        return False
+    
+    ### ANALYSIS ###
+
     def psd(self, save=False, directory=".", show=True):
         """Plots power spectral density for lightcurve.
 
@@ -196,14 +261,13 @@ class ChandraLightcurve:
         """
 
         return analysis.psd(self, save=save, directory=directory, show=show)
-
+    
     def running_average(
         self,
         plusminus=2,
         binning=1000.0,
         figsize=(15, 9),
         rate=True,
-        color="blue",
         fontsize=25,
         family="sans serif",
         save=False,
@@ -236,63 +300,15 @@ class ChandraLightcurve:
         show : bool, optional
             Show plot or not, by default True
         """
-        plot.running_average(
+        analysis.running_average(
             self,
             binning=binning,
             plusminus=plusminus,
             figsize=figsize,
             rate=rate,
-            color=color,
             fontsize=fontsize,
             family=family,
             save=save,
             directory=directory,
             show=show,
         )
-
-    def eclipse_detect(self, binsize=300, rate_threshold=5, time_threshold=10):
-        """Checks for eclipses in files.
-
-        Parameters
-        ----------
-        lc : ChandraLightcurve
-            ChandraLightcurve object
-        binsize : int
-            Size of bin, by default 300
-        rate_threshold : int
-            Minimum kilosecond count rate, by default 5
-        time_threshold : int
-            Minimum observation length (in kiloseconds), by default 10
-
-        Returns
-        -------
-        list
-            2D array of eclipse timestamps
-        """
-
-        if self.rate_ks >= rate_threshold and self.time >= time_threshold:
-            algos.eclipse_detect(self, binsize=binsize)
-
-    def flare_detect(self, binsize=5, sigma=3, threshold=0.3):
-        """Detects potential flares in lightcurves.
-
-        Parameters
-        ----------
-        binsize : int
-            Items per bin, by default 10
-        sigma : float
-            Number of standard deviations of regression slope above mean of regression slopes of all bins, by default 3
-        threshold : float
-            Threshold of clustering of bins which could be part of a flare from 0 to 1, by default 0.3
-
-        Returns
-        -------
-        bool
-            Whether flare(s) is/are detected or not
-        """
-        if ml.calculate_r(self.time_array, self.cumulative_counts) ** 2 <= 0.998:
-            return algos.flare_detect(
-                self, binsize=binsize, sigma=sigma, threshold=threshold
-            )
-
-        return False

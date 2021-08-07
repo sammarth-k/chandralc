@@ -53,3 +53,9 @@ test/eggs.csv
 test/file.csv
 *.png
 extract lightcurves.md
+chandralc/.ipynb_checkpoints/galaXy-checkpoint.py
+chandralc/.ipynb_checkpoints/algos-checkpoint.py
+chandralc/apis/.ipynb_checkpoints/__init__-checkpoint.py
+chandralc/apis/.ipynb_checkpoints/ads-checkpoint.py
+chandralc/apis/.ipynb_checkpoints/vizier-checkpoint.py
+chandralc/.ipynb_checkpoints/states-checkpoint.py

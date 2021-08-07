@@ -2,9 +2,14 @@
 
 # Dependencies
 import numpy as np
-from chandralc import analysis, ml
+import matplotlib.pyplot as plt
+import matplotlib.patches as patches
 
+# chandralc modules
+from chandralc import analysis
+from chandralc import ml
 
+### FLARE DETECTION ###
 def flare_detect(lc, binsize=10, sigma=3, threshold=0.3):
     """Detects potential flares in lightcurves.
 
@@ -56,7 +61,7 @@ def flare_detect(lc, binsize=10, sigma=3, threshold=0.3):
 
     return False
 
-
+### ECLIPSE DETECTION ###
 def eclipse_detect(lc, binsize=300):
     """Checks for eclipses in files.
 
@@ -78,36 +83,49 @@ def eclipse_detect(lc, binsize=300):
     binned_count_arrays = analysis.bin_toarrays(lc.cumulative_counts, binsize)
 
     # Array of slopes of each bin from regression line
-    slopes = [
-        ml.regression_equation(x, y)[0]
-        for x, y in zip(binned_time_arrays, binned_count_arrays)
-    ]  # [(i[-1] - i[0])/binsize*3241 for i in binned_count_arrays]
-
+    slopes = [ml.regression_equation(x,y)[0] for x,y in zip(binned_time_arrays, binned_count_arrays)] #[(i[-1] - i[0])/binsize*3241 for i in binned_count_arrays]
+    
     # Replacing nan with 0
     for i in range(len(slopes)):
         if np.isnan(slopes[i]):
             slopes[i] = 0
-
+    
     # finding clusters of eclipse candidates
     potential_eclipses = [[]]
     eclipse = True
     index = 0
 
     for i in range(len(slopes)):
-
+        
         if slopes[i] <= 1:
-
-            if eclipse is False:
+            
+            if eclipse == False:
                 index += 1
                 potential_eclipses.append([])
-
+                
             potential_eclipses[index].append(i * binsize * lc.chandra_bin)
             eclipse = True
-
+            
         else:
             eclipse = False
-
+            
     return [cluster for cluster in potential_eclipses if len(cluster) > 1]
 
+def eclipse_mark(lc):
+    '''Flags eclipses in lightcurves and marks them.'''
+    
+    fig,ax = plt.subplots()
+    
+    n = int(500/3.241)
+    binned = [sum(i) for i in analysis.bin_toarrays(lc.raw_phot, binsize=n) for j in range(n)]
 
-# Adding WWZ test n stuff
+    ax.plot(lc.time_array[:len(binned)], binned)
+    for eclipse in eclipse_detect(lc):
+        for ec in eclipse:
+
+            rect = patches.Rectangle((ec/1000,0), 300*3.241/1000, max(binned), linewidth=1, edgecolor='r', facecolor='red')
+            ax.add_patch(rect)
+    
+    plt.show()
+    plt.close()
+    
