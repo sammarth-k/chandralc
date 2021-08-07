@@ -29,7 +29,7 @@ dbs1 = [
     "LMC",
     "SMC",
 ]
-dbs2 = ["NGC4736", "NGC1313", "M82"]
+dbs2 = ["NGC4736", "NGC1313", "M82", "M33"]
 
 repos = [dbs1, dbs2]
 
