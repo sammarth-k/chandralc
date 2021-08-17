@@ -141,7 +141,6 @@ def get_all_files():
     # iterate through list of galaxies
     for repo in repos:
         for db in repo:
-
             # create a list of all available extracted lightcurves
             files += get_files(db)
 
@@ -264,6 +263,7 @@ def download_lcs(filenames, directory="."):
         for i in range(len(repos)):
             if galaxy in repos[i]:
                 repo_num = i + 1
+                break
 
         # url of lightcurve
         url = f"https://raw.githubusercontent.com/sammarth-k/CXO-lightcurves{repo_num}/main/{galaxy}/textfiles/{filename}"
