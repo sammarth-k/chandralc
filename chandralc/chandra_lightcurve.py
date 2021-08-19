@@ -20,6 +20,8 @@ class ChandraLightcurve:
 
     Attributes
     ----------
+    path: str
+        File path
     df: pandas.core.frame.DataFrame
         DataFrame of lightcurve
     time: float
@@ -50,7 +52,9 @@ class ChandraLightcurve:
         file : str
             Filename or filepath of raw lightcurve
         """
-        
+
+        self.path = file
+
         if "txt" in file:
             self.df = convert.txt_to_df(file, convert.header_check(file))
         elif "fits" in file:
@@ -89,8 +93,8 @@ class ChandraLightcurve:
         file = file.split("_lc.fits")[0].split("_")
         file = file.split("/")[-1] if "/" in file else file
         self.obsid = file[1]
-        self.coords = convert.extract_coords(file)
-        self.galaxy = get_galaxy(file)
+        self.coords = convert.extract_coords(self.path)
+        self.galaxy = get_galaxy(self.path)
     
     ### GENERAL PLOTTING ###
     
