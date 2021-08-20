@@ -94,7 +94,10 @@ class ChandraLightcurve:
         file = file.split("/")[-1] if "/" in file else file
         self.obsid = file[1]
         self.coords = convert.extract_coords(self.path)
-        self.galaxy = get_galaxy(self.path)
+        try:
+            self.galaxy = get_galaxy(self.path)
+        except:
+            self.galaxy = None
     
     ### GENERAL PLOTTING ###
     
