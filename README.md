@@ -1,6 +1,6 @@
 <div align="center"> <img src="images/chandralc.png" width="100%"></div>
 
-# chandralc: The Future of Chandra Lightcurve Analysis 
+# chandralc: A Python Package for CXO Lightcurve Analysis
 
 <p align="left">
  <a href="LICENSE.txt"><img src = "https://img.shields.io/github/license/sammarth-k/chandralc?logo=MIT"></a> <a herfF="https://python.org" target="_blank"><img src="https://img.shields.io/badge/Made%20with-Python-306998.svg"></a> <a href="https://github.com/psf/black"><img alt="Code style: black" src="https://img.shields.io/badge/code%20style-black-000000.svg"></a>
