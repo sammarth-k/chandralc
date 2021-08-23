@@ -1,9 +1,13 @@
-"""This module contains functions to plot lightcuves."""
+"""This module contains functions to plot lightcurves in different ways."""
 
-# Dependencies numpy as np
+# Dependencies
 import matplotlib.pyplot as plt
+import matplotlib
 import numpy as np
 import warnings
+
+matplotlib.use("agg")
+plt.ioff()
 
 
 def lightcurve(
@@ -17,7 +21,7 @@ def lightcurve(
     save=False,
     directory=".",
     show=True,
-    timespan=False
+    timespan=False,
 ):
     """Plot binned lightcurves over time.
 
@@ -97,7 +101,7 @@ def lightcurve(
 
     if not rate:
         plt.yticks(np.arange(0, upper + 1, 3))
-        
+
     if timespan is not False:
         plt.xlim(timespan[0], timespan[1])
 
@@ -199,89 +203,3 @@ def raw_binned_lightcurve(lc, binning=1000.0, rate=True):
     time_array = np.array(range(len(bins))) * lc.chandra_bin / 1000 * group_size
 
     return time_array, bins
-
-
-def running_average(
-    lc,
-    plusminus=2,
-    binning=1000.0,
-    figsize=(15, 9),
-    rate=True,
-    fontsize=25,
-    family="sans serif",
-    save=False,
-    directory=".",
-    show=True,
-):
-    """Plots running average over binned lightcurve.
-
-    Parameters
-    ----------
-    lc: ChandraLightcurve
-        ChandraLightcurve object
-    plusminus: int
-        Number of bins before and after current bin
-    binning : float, optional
-        Binning in seconds, by default 1000.0
-    figsize : tuple, optional
-        Size of figure in inches (length, breadth), by default (15, 9)
-    rate : bool, optional
-        Choose whether to plot count rate or net counts per bin on y-axis, by default True
-    fontsize : int, optional
-        Fontsize of tick labels, by default 25
-    family : str, optional
-        Font family for text, by default 'sans serif'
-    save : bool, optional
-        Save figure or not, by default False
-    directory : str, optional
-        Directory to save figure in, by default "."
-    show : bool, optional
-        Show plot or not, by default True
-    """
-
-    # getting initial data from binned lightcurve
-    data = raw_binned_lightcurve(lc, binning=binning)
-    phot_plot = data[1]
-    time = data[0]
-
-    # calculating running averages
-    with warnings.catch_warnings():
-        warnings.simplefilter("ignore", category=RuntimeWarning)
-        running_avgs = [
-            np.mean(data[1][i - plusminus : i + plusminus + 1])
-            for i in range(len(phot_plot))
-        ]
-
-    # plotting code
-    plt.figure(figsize=figsize)
-
-    # binned lightcurve as scatterplot
-    plt.scatter(time, phot_plot, color="blue", alpha=0.4)
-
-    # running averages
-    plt.plot(time, running_avgs, color="red")
-
-    if rate:
-        plt.ylabel("Count Rate (c/s)", fontsize=fontsize)
-    else:
-        plt.ylabel("Photon Count", fontsize=fontsize)
-
-    plt.xlabel("Time (ks)", fontsize=fontsize)
-    plt.title(
-        "Running Average Plot Computed Over $\pm$ 2ks, On Top of 1ks Binned Lightcurve"
-    )
-
-    plt.rc("text", usetex=False)
-    plt.rc("font", family=family)
-
-    if save:
-        figure = plt.gcf()
-        figure.savefig(
-            f"{directory}/chandralc_running_average_{lc.coords}_{lc.obsid}.jpg",
-            bbox_inches="tight",
-        )
-
-    if show:
-        plt.show()
-
-    plt.close()

@@ -1,4 +1,4 @@
-"""This module contains functions for conversion of coordinates and files"""
+"""This module contains functions for conversion of coordinates and file formats"""
 
 # dependencies
 from astropy.coordinates import SkyCoord
@@ -121,15 +121,13 @@ def txt_to_df(file, header):
     return dataframe
 
 
-def fits_to_df(file, header):
+def fits_to_df(file):
     """Converts FITS lightcurve file to Pandas DataFrame.
 
     Parameters
     ----------
     file : str
         Filename or filepath
-    header : int
-        To skip header if present
 
     Returns
     -------

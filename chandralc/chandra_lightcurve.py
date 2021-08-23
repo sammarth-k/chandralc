@@ -5,8 +5,15 @@
 # External Modules
 import numpy as np
 
-# User made modules
-from chandralc import convert, analysis, plot, ml, algos
+# chandralc modules
+from chandralc import convert
+from chandralc import analysis
+from chandralc import plot
+from chandralc import ml
+from chandralc import states
+from chandralc.apis import ads
+
+# specific function
 from chandralc.download import get_galaxy
 
 
@@ -53,7 +60,7 @@ class ChandraLightcurve:
         if "txt" in file:
             self.df = convert.txt_to_df(file, convert.header_check(file))
         elif "fits" in file:
-            self.df = convert.fits_to_df(file, convert.header_check(file))
+            self.df = convert.fits_to_df(file)
 
         self.chandra_bin = 3.241039999999654
 
@@ -89,7 +96,12 @@ class ChandraLightcurve:
         file = file.split("/")[-1] if "/" in file else file
         self.obsid = file[1]
         self.coords = convert.extract_coords(self.path)
-        self.galaxy = get_galaxy(self.path)
+        try:
+            self.galaxy = get_galaxy(self.path)
+        except:
+            self.galaxy = None
+
+    ### GENERAL PLOTTING ###
 
     def lightcurve(
         self,
@@ -102,7 +114,7 @@ class ChandraLightcurve:
         save=False,
         directory=".",
         show=True,
-        timespan=False
+        timespan=False,
     ):
         """Plots cumulative photon counts over time.
 
@@ -124,7 +136,7 @@ class ChandraLightcurve:
             Show plot or not, by default True
         timespan: bool/tuple
             range of x axis (kiloseconds), by default False
-            
+
         """
 
         plot.lightcurve(
@@ -138,7 +150,7 @@ class ChandraLightcurve:
             save=save,
             directory=directory,
             show=show,
-            timespan=timespan
+            timespan=timespan,
         )
 
     def cumulative(
@@ -186,6 +198,71 @@ class ChandraLightcurve:
             show=show,
         )
 
+    ### STATE DETECTION ###
+
+    # ECLIPSES
+    def eclipse_detect(self, binsize=300, rate_threshold=4, time_threshold=10):
+        """Checks for eclipses in files.
+
+        Parameters
+        ----------
+        lc : ChandraLightcurve
+            ChandraLightcurve object
+        binsize : int
+            Size of bin, by default 300
+        rate_threshold : int
+            Minimum kilosecond count rate, by default 5
+        time_threshold : int
+            Minimum observation length (in kiloseconds), by default 10
+
+        Returns
+        -------
+        list
+            2D array of eclipse timestamps
+        """
+
+        if self.rate_ks >= rate_threshold and self.time >= time_threshold:
+            if len(states.eclipse_detect(self, binsize=binsize)) > 0:
+                return True
+
+    def eclipse_mark(self):
+        """Flags eclipses in lightcurves and marks them."""
+
+        states.eclipse_mark(self)
+
+    # FLARES
+    def flare_detect(self, binsize=5, sigma=3, threshold=0.3):
+        """Detects potential flares in lightcurves.
+
+        Parameters
+        ----------
+        binsize : int
+            Items per bin, by default 10
+        sigma : float
+            Number of standard deviations of regression slope above mean of regression slopes of all bins, by default 3
+        threshold : float
+            Threshold of clustering of bins which could be part of a flare from 0 to 1, by default 0.3
+
+        Returns
+        -------
+        bool
+            Whether flare(s) is/are detected or not
+        """
+        if ml.calculate_r(self.time_array, self.cumulative_counts) ** 2 <= 0.998:
+            if (
+                len(
+                    states.flare_detect(
+                        self, binsize=binsize, sigma=sigma, threshold=threshold
+                    )
+                )
+                > 0
+            ):
+                return True
+
+        return False
+
+    ### ANALYSIS ###
+
     def psd(self, save=False, directory=".", show=True):
         """Plots power spectral density for lightcurve.
 
@@ -203,7 +280,6 @@ class ChandraLightcurve:
         binning=1000.0,
         figsize=(15, 9),
         rate=True,
-        color="blue",
         fontsize=25,
         family="sans serif",
         save=False,
@@ -236,7 +312,7 @@ class ChandraLightcurve:
         show : bool, optional
             Show plot or not, by default True
         """
-        plot.running_average(
+        analysis.running_average(
             self,
             binning=binning,
             plusminus=plusminus,
@@ -249,49 +325,18 @@ class ChandraLightcurve:
             show=show,
         )
 
-    def eclipse_detect(self, binsize=300, rate_threshold=5, time_threshold=10):
-        """Checks for eclipses in files.
+    ### API INTEGRATION ###
+    def search_ads(self, browser=True, radius=0.167):
+        """Opens browser and queries NASA ADS for matches.
 
         Parameters
         ----------
-        lc : ChandraLightcurve
-            ChandraLightcurve object
-        binsize : int
-            Size of bin, by default 300
-        rate_threshold : int
-            Minimum kilosecond count rate, by default 5
-        time_threshold : int
-            Minimum observation length (in kiloseconds), by default 10
-
-        Returns
-        -------
-        list
-            2D array of eclipse timestamps
+        file: str
+            filename of lightcurve
+        browser: bool
+            open link in browser or not, by default True
+        radius: int
+            search radius, by default 0.167
         """
 
-        if self.rate_ks >= rate_threshold and self.time >= time_threshold:
-            algos.eclipse_detect(self, binsize=binsize)
-
-    def flare_detect(self, binsize=5, sigma=3, threshold=0.3):
-        """Detects potential flares in lightcurves.
-
-        Parameters
-        ----------
-        binsize : int
-            Items per bin, by default 10
-        sigma : float
-            Number of standard deviations of regression slope above mean of regression slopes of all bins, by default 3
-        threshold : float
-            Threshold of clustering of bins which could be part of a flare from 0 to 1, by default 0.3
-
-        Returns
-        -------
-        bool
-            Whether flare(s) is/are detected or not
-        """
-        if ml.calculate_r(self.time_array, self.cumulative_counts) ** 2 <= 0.998:
-            return algos.flare_detect(
-                self, binsize=binsize, sigma=sigma, threshold=threshold
-            )
-
-        return False
+        return ads.search_ads(self.path, browser=browser, radius=radius)
