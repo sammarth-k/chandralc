@@ -11,45 +11,53 @@ To see ``chandralc`` in action, check out <a href="https://github.com/sammarth-k
 
 ### Features:
 
+#### Lightcurve Extraction
+Extract lightcurves from one or more ObsIDs automatically. This feautre is not yet available publicly.
+	
 #### Downloads:
-
-- Large database of over 100,000 files
-- Downloading extracted lightcurves from 13+ galaxies.
+- Large database of over 150,000 lightcurves from 10,000+ X-ray Sources
+- Downloading extracted lightcurves from 19+ galaxies.
 - Search for lightcurves with J2000 coordinates
 - Retrieve galaxy from lightcurve file names
 
+#### Convert:
+- Convert FITS lightcurves to ASCII txt files
+	
 #### Analysis:
-
 ##### Observation Details
 - Total counts
-- Observation time
-- Count rate (kilosecond, seconds)
-- Source coordinates
-- ObsID
+- Observation time (in kiloseconds)
+- Count rate (kiloseconds (`rate_ks`), seconds (`rate_s`))
+- Source coordinates (J2000 format)
+- ObsID (Observation ID of the lightcurve)
 - Galaxy (Messier or NGC)
 	
 #### Plots
 - Cumulative Count plots over time to view net counts over time
 - Lightcurves with custom binning to view data in the form of count rate per bin or net counts per bin over time.
 - Power Spectral Density (PSD) to identify periodicity and their time periods/frequencies.
-- Running Averages
+- Running Average Plot
 
-#### Feature Detection
+#### State Detection
 - Flares
 - Eclipses
+	
+#### Astrophysics Database Connection
+- NASA ADS
+	- Search for listings which include the source
+	- Simple usage: only one method require (`.search_ads()`)
 
 ##### Upcoming features:
-
 - Integration with <a href="https://github.com/sammarth-k/galaXy.lc"> galaXy.lc </a>
-- VizeR and NASA ADS connection
+- VizeR connection
 
 ### Installation
-
 1. Install dependencies via requirements.txt file:
    ```pip install requirements.txt```
-
+	
+[more details coming soon]
+	
 ##### Cite chandralc
-
 If you use ``chandralc`` in your research, please cite it as follows:
 
 ```tex
