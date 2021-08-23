@@ -5,8 +5,10 @@ import matplotlib.pyplot as plt
 import matplotlib
 import numpy as np
 import warnings
+
 matplotlib.use("agg")
 plt.ioff()
+
 
 def lightcurve(
     lc,

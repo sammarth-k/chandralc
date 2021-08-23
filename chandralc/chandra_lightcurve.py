@@ -11,9 +11,11 @@ from chandralc import analysis
 from chandralc import plot
 from chandralc import ml
 from chandralc import states
+from chandralc.apis import ads
 
 # specific function
 from chandralc.download import get_galaxy
+
 
 class ChandraLightcurve:
     """Class for lightcurve plotting and analysis.
@@ -58,7 +60,7 @@ class ChandraLightcurve:
         if "txt" in file:
             self.df = convert.txt_to_df(file, convert.header_check(file))
         elif "fits" in file:
-            self.df = convert.fits_to_df(file, convert.header_check(file))
+            self.df = convert.fits_to_df(file)
 
         self.chandra_bin = 3.241039999999654
 
@@ -98,9 +100,9 @@ class ChandraLightcurve:
             self.galaxy = get_galaxy(self.path)
         except:
             self.galaxy = None
-    
+
     ### GENERAL PLOTTING ###
-    
+
     def lightcurve(
         self,
         binning=500.0,
@@ -197,7 +199,7 @@ class ChandraLightcurve:
         )
 
     ### STATE DETECTION ###
-    
+
     # ECLIPSES
     def eclipse_detect(self, binsize=300, rate_threshold=4, time_threshold=10):
         """Checks for eclipses in files.
@@ -222,12 +224,12 @@ class ChandraLightcurve:
         if self.rate_ks >= rate_threshold and self.time >= time_threshold:
             if len(states.eclipse_detect(self, binsize=binsize)) > 0:
                 return True
-    
+
     def eclipse_mark(self):
-        '''Flags eclipses in lightcurves and marks them.'''
-        
+        """Flags eclipses in lightcurves and marks them."""
+
         states.eclipse_mark(self)
-            
+
     # FLARES
     def flare_detect(self, binsize=5, sigma=3, threshold=0.3):
         """Detects potential flares in lightcurves.
@@ -247,11 +249,18 @@ class ChandraLightcurve:
             Whether flare(s) is/are detected or not
         """
         if ml.calculate_r(self.time_array, self.cumulative_counts) ** 2 <= 0.998:
-            if len(states.flare_detect(self, binsize=binsize, sigma=sigma, threshold=threshold)) > 0:
+            if (
+                len(
+                    states.flare_detect(
+                        self, binsize=binsize, sigma=sigma, threshold=threshold
+                    )
+                )
+                > 0
+            ):
                 return True
 
         return False
-    
+
     ### ANALYSIS ###
 
     def psd(self, save=False, directory=".", show=True):
@@ -264,7 +273,7 @@ class ChandraLightcurve:
         """
 
         return analysis.psd(self, save=save, directory=directory, show=show)
-    
+
     def running_average(
         self,
         plusminus=2,
@@ -315,3 +324,19 @@ class ChandraLightcurve:
             directory=directory,
             show=show,
         )
+
+    ### API INTEGRATION ###
+    def search_ads(self, browser=True, radius=0.167):
+        """Opens browser and queries NASA ADS for matches.
+
+        Parameters
+        ----------
+        file: str
+            filename of lightcurve
+        browser: bool
+            open link in browser or not, by default True
+        radius: int
+            search radius, by default 0.167
+        """
+
+        return ads.search_ads(self.path, browser=browser, radius=radius)

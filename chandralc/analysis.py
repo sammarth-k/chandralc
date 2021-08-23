@@ -8,6 +8,7 @@ import numpy as np
 # chandralc modules
 from chandralc import ml
 
+
 def psd(lightcurve, save=False, directory=".", show=True):
     """Plots power spectral density for lightcurve.
 
@@ -111,6 +112,7 @@ def bin_toarrays(lightcurve, binsize):
 
     return binned_photons
 
+
 def running_average(
     lc,
     plusminus=2,
@@ -195,4 +197,3 @@ def running_average(
         plt.show()
 
     plt.close()
-    
