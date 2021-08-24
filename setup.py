@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='chandralc',
-    version='0.1-alpha',
+    version='0.0.1-alpha',
     packages=find_packages(),
     url='https://github.com/sammarth-k/chandralc',
     license='MIT',
@@ -11,5 +11,5 @@ setup(
     description='A Python package for CXO lightcurve analysis',
     long_description_content_type = "text/markdown",
     long_description = open('README.md').read(),
-    install_requires=['requirements.txt']
+    install_requires=['astropy', 'scipy', 'numpy', 'matplotlib', 'requests']
 )
