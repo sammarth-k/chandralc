@@ -16,9 +16,11 @@ from chandralc import convert
 clc_path = os.path.dirname(inspect.getfile(convert))
 
 with open(clc_path + "/config/mpl_backend.chandralc", "r") as f:
+
     if "True" in f.read():
         matplotlib.use("agg")
         plt.ioff()
+        print("Using agg backend for plotting")
         
 def lightcurve(
     lc,
@@ -32,6 +34,7 @@ def lightcurve(
     directory=".",
     show=True,
     timespan=False,
+    ymax=None
 ):
     """Plot binned lightcurves over time.
 
@@ -57,8 +60,10 @@ def lightcurve(
         Directory to save figure in, by default "."
     show : bool, optional
         Show plot or not, by default True
-    timespan: bool/tuple
+    timespan : bool/tuple
         range of x axis (kiloseconds), by default False
+    ymax : float, optional
+        Maximum y-axis value, by default None
     """
 
     photons_in_group = []
@@ -110,7 +115,10 @@ def lightcurve(
     upper = np.max(avg)
 
     if not rate:
-        plt.yticks(np.arange(0, upper + 1, 3))
+        if ymax == None:
+            plt.yticks(np.arange(0, upper + 1, 3))
+        else:
+            plt.yticks(np.arange(0, ymax + 1, 3))
 
     if timespan is not False:
         plt.xlim(timespan[0], timespan[1])
