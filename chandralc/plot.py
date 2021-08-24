@@ -1,15 +1,25 @@
 """This module contains functions to plot lightcurves in different ways."""
 
+# PSL modules
+import os
+import inspect
+
 # Dependencies
 import matplotlib.pyplot as plt
 import matplotlib
 import numpy as np
 import warnings
 
-matplotlib.use("agg")
-plt.ioff()
+# chandralc modules
+from chandralc import convert
 
+clc_path = os.path.dirname(inspect.getfile(convert))
 
+with open(clc_path + "/config/mpl_backend.chandralc", "r") as f:
+    if "True" in f.read():
+        matplotlib.use("agg")
+        plt.ioff()
+        
 def lightcurve(
     lc,
     binning=500.0,

@@ -1,14 +1,18 @@
 """This module contains functions to download data from the online locations."""
 
 # Python Standard Library Modules
-import os, csv, time, requests
+import os
+import csv
+import time
+import requests
+import inspect
 
 # chandralc modules
 from chandralc import convert
 
 # ----------------------------------------------------------
 
-
+clc_path = os.path.dirname(inspect.getfile(convert))
 # Downloading databases
 
 # list of galaxies with extracted lightcurves
@@ -29,12 +33,14 @@ dbs1 = [
     "SMC",
 ]
 dbs2 = ["M51", "NGC4736", "NGC1313", "M82", "M33"]
-
+dbs = dbs1 + dbs2
 repos = [dbs1, dbs2]
 
 
 def download_db():
     """Download database index."""
+    if "file_dbs" not in os.listdir(clc_path):
+        os.mkdir(clc_path + "/file_dbs")
 
     if "file_dbs" in os.listdir():
         count = 1
@@ -45,14 +51,14 @@ def download_db():
 
             for db in repo:
 
-                if f"{db}.csv" not in os.listdir("./file_dbs"):
+                if f"{db}.csv" not in os.listdir(clc_path + "/file_dbs"):
 
                     start = time.time()
 
                     url = f"https://raw.githubusercontent.com/sammarth-k/Chandra-Lightcurve-Download/main/file_dbs/{db}.csv"
                     data = requests.get(url)
 
-                    with open(f"./file_dbs/{db}.csv", "w", encoding="utf-8") as file:
+                    with open(f"{clc_path}/file_dbs/{db}.csv", "w", encoding="utf-8") as file:
                         file.write(data.text)
 
                     size += len(data.text)
@@ -62,17 +68,13 @@ def download_db():
                     total_time += end - start
 
                     print(
-                        f"Progress: {count} of {len(dbs)} downloaded | Total Size: {round(size/1024,2)} KB | Time Elapsed: {round(total_time,2)} seconds",
+                        f"Progress: {count} of {len(dbs)} downloaded | Total Download Size: {round(size/1024,2)} KB | Time Elapsed: {round(total_time,2)} seconds",
                         end="\r",
                     )
 
                 count += 1
 
-            return
-
-    # if file_dbs does not exist
-
-    os.mkdir("./file_dbs")
+        return
 
     count = 1
     total_time = 0
@@ -87,7 +89,7 @@ def download_db():
             url = f"https://raw.githubusercontent.com/sammarth-k/Chandra-Lightcurve-Download/main/file_dbs/{db}.csv"
             data = requests.get(url)
 
-            with open(f"./file_dbs/{db}.csv", "w", encoding="utf-8") as file:
+            with open(f"{clc_path}/file_dbs/{db}.csv", "w", encoding="utf-8") as file:
                 file.write(data.text)
 
             size += len(data.text)
@@ -119,7 +121,7 @@ def get_files(galaxy):
     """
 
     # opening database of filenames for the particular galaxy
-    with open(f"./file_dbs/{galaxy}.csv", "r") as fnames:
+    with open(f"{clc_path}/file_dbs/{galaxy}.csv", "r") as fnames:
         files = [file[0] for file in csv.reader(fnames)]
 
     # returns array of all files

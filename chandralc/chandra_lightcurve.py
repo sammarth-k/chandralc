@@ -14,7 +14,7 @@ from chandralc import states
 from chandralc.apis import ads
 
 # specific function
-from chandralc.download import get_galaxy
+from chandralc import download
 
 
 class ChandraLightcurve:
@@ -97,7 +97,7 @@ class ChandraLightcurve:
         self.obsid = file[1]
         self.coords = convert.extract_coords(self.path)
         try:
-            self.galaxy = get_galaxy(self.path)
+            self.galaxy = download.get_galaxy(self.path)
         except:
             self.galaxy = None
 
@@ -201,7 +201,7 @@ class ChandraLightcurve:
     ### STATE DETECTION ###
 
     # ECLIPSES
-    def eclipse_detect(self, binsize=300, rate_threshold=4, time_threshold=10):
+    def eclipse_detect(self, binsize=300, rate_threshold=3.5, time_threshold=10):
         """Checks for eclipses in files.
 
         Parameters
