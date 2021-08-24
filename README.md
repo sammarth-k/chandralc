@@ -7,7 +7,7 @@
 
 The `chandralc` Python package was developed to analyze Chandra X-ray Observatory lightcurves in a matter of seconds. With algorithms and programs to automatically extract, download, plot, and analyze data, it is the perfect tool to study CXO lightcurves efficiently and accurately.
 
-To see ``chandralc`` in action, check out [the demo[("https://github.com/sammarth-k/chandralc/blob/main/demo.ipynb")
+To see ``chandralc`` in action, check out [the demo](https://github.com/sammarth-k/chandralc/blob/main/demo.ipynb).
 
 ### Features:
 
@@ -57,7 +57,7 @@ Extract lightcurves from one or more ObsIDs automatically. This feautre is not y
 
 ##### Upcoming features:
 
-- Integration with [galaXy]("https://github.com/sammarth-k/galaXy.lc")
+- Integration with [galaXy]()
 - VizeR connection
 
 ### Installation
