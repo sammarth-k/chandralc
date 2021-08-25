@@ -41,8 +41,7 @@ def download_db():
     """Download database index."""
     if "file_dbs" not in os.listdir(clc_path):
         os.mkdir(clc_path + "/file_dbs")
-
-    if "file_dbs" in os.listdir():
+    
         count = 1
         total_time = 0
         size = 0
@@ -51,6 +50,36 @@ def download_db():
 
             for db in repo:
 
+                start = time.time()
+
+                url = f"https://raw.githubusercontent.com/sammarth-k/Chandra-Lightcurve-Download/main/file_dbs/{db}.csv"
+                data = requests.get(url)
+
+                with open(f"{clc_path}/file_dbs/{db}.csv", "w", encoding="utf-8") as file:
+                    file.write(data.text)
+
+                size += len(data.text)
+
+                end = time.time()
+
+                total_time += end - start
+
+                print(
+                    f"Progress: {count} of {len([db for repo in repos for db in repo])} downloaded | Total Size: {round(size/1024,2)} KB | Time Elapsed: {round(total_time,2)} seconds",
+                    end="\r",
+                )
+
+                count += 1
+            
+    elif "file_dbs" in os.listdir():
+        count = 1
+        total_time = 0
+        size = 0
+
+        for repo in repos:
+
+            for db in repo:
+                
                 if f"{db}.csv" not in os.listdir(clc_path + "/file_dbs"):
 
                     start = time.time()
@@ -75,35 +104,6 @@ def download_db():
                 count += 1
 
         return
-
-    count = 1
-    total_time = 0
-    size = 0
-
-    for repo in repos:
-
-        for db in repo:
-
-            start = time.time()
-
-            url = f"https://raw.githubusercontent.com/sammarth-k/Chandra-Lightcurve-Download/main/file_dbs/{db}.csv"
-            data = requests.get(url)
-
-            with open(f"{clc_path}/file_dbs/{db}.csv", "w", encoding="utf-8") as file:
-                file.write(data.text)
-
-            size += len(data.text)
-
-            end = time.time()
-
-            total_time += end - start
-
-            print(
-                f"Progress: {count} of {len([db for repo in repos for db in repo])} downloaded | Total Size: {round(size/1024,2)} KB | Time Elapsed: {round(total_time,2)} seconds",
-                end="\r",
-            )
-
-            count += 1
 
 
 def get_files(galaxy):
@@ -253,7 +253,7 @@ def download_lcs(filenames, directory="."):
         pass
 
     for filename in filenames:
-
+        
         # timer
         start = time.time()
 
@@ -261,6 +261,7 @@ def download_lcs(filenames, directory="."):
         galaxy = get_galaxy(filename)
 
         # getting repo number
+        repo_num = 0
         for i in range(len(repos)):
             if galaxy in repos[i]:
                 repo_num = i + 1
@@ -272,7 +273,7 @@ def download_lcs(filenames, directory="."):
         # using a GET request to download lightcurve
         try:
             data = requests.get(url)
-
+            
             # Exception in case of Error 404
             data.raise_for_status()
 
