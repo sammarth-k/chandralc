@@ -4,7 +4,7 @@
 
 <p align="left">
  <a href="https://github.com/sammarth-k/chandralc/blob/main/LICENSE.txt"><img src = "https://img.shields.io/github/license/sammarth-k/chandralc?logo=MIT"></a> 
-<a href="https://pypi.org/project/chandralc"><img src="https://github.com/sammarth-k/chandralc/blob/main/LICENSE.txt"></a>
+<a href="https://pypi.org/project/chandralc"><img src="https://img.shields.io/pypi/v/chandralc?color=blue"></a>
 <img src="https://img.shields.io/github/v/tag/sammarth-k/chandralc?color=red">
 <a href="https://github.com/psf/black"><img alt="Code style: black" src="https://img.shields.io/badge/code%20style-black-000000.svg"></a>
 
