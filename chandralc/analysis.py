@@ -4,10 +4,10 @@
 import matplotlib.pyplot as plt
 from scipy import signal
 import numpy as np
+import warnings
 
 # chandralc modules
 from chandralc import ml
-
 
 def psd(lightcurve, save=False, directory=".", show=True):
     """Plots power spectral density for lightcurve.
@@ -187,16 +187,19 @@ def running_average(
     # calculating running averages
     with warnings.catch_warnings():
         warnings.simplefilter("ignore", category=RuntimeWarning)
-        running_avgs = [
+        
+        running_avgs = [np.mean(data[1][0:plusminus])]*plusminus + [
             np.mean(data[1][i - plusminus : i + plusminus + 1])
-            for i in range(len(phot_plot))
-        ]
+            for i in range(plusminus, len(phot_plot) - plusminus)
+        ] + [np.mean(data[1][-1*plusminus: -1])] * (plusminus)
 
     # plotting code
     plt.figure(figsize=figsize)
 
     # binned lightcurve as scatterplot
-    plt.scatter(time, phot_plot, color="blue", alpha=0.4)
+    phot_plot = [i for i in phot_plot for j in range(int(binning/lc.chandra_bin))]
+    time_array = np.array(range(len(phot_plot))) * lc.chandra_bin / 1000
+    plt.plot(time_array, phot_plot, color="black", alpha=0.3)
 
     # running averages
     plt.plot(time, running_avgs, color="red")
@@ -208,7 +211,7 @@ def running_average(
 
     plt.xlabel("Time (ks)", fontsize=fontsize)
     plt.title(
-        "Running Average Plot Computed Over $\pm$ 2ks, On Top of 1ks Binned Lightcurve"
+        f"Running Average Plot Computed Over $\pm$ {plusminus} ks, On Top of {binning}s Binned Lightcurve"
     )
 
     plt.rc("text", usetex=False)
