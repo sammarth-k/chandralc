@@ -192,32 +192,3 @@ def cumulative(
 
     plt.close()
 
-
-# modified version of lightcurve function
-def raw_binned_lightcurve(lc, binning=1000.0, rate=True):
-    """Returns raw binned lightcurve."""
-
-    bins = []
-
-    group_size = int(binning / lc.chandra_bin)
-
-    # range: total number of df points over included bins --> temp3 of intervals
-    for j in range(len(lc.raw_phot) // group_size):
-
-        # len(temp1) of intervals total_time temp3 of bins in that interval
-        j = j * group_size
-        temp2 = 0
-
-        for k in range(group_size):
-            # sum of all photons within one interval
-            temp2 = temp2 + lc.raw_phot[j + k]
-
-        # appends that sum to a list
-        bins.append(temp2)
-
-    bins = np.array(bins) / (lc.chandra_bin * group_size) if rate else bins
-
-    # getting NumPy array length of the array and increasing values by 1
-    time_array = np.array(range(len(bins))) * lc.chandra_bin / 1000 * group_size
-
-    return time_array, bins
