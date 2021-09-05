@@ -13,6 +13,7 @@ from chandralc import convert
 
 clc_path = os.path.dirname(inspect.getfile(convert))
 
+
 def _log(url):
     """Logs ADS queries."""
 

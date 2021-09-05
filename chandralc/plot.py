@@ -11,9 +11,9 @@ import numpy as np
 import warnings
 
 # chandralc modules
-from chandralc import convert
+from chandralc import download
 
-clc_path = os.path.dirname(inspect.getfile(convert))
+clc_path = os.path.dirname(inspect.getfile(download))
 
 with open(clc_path + "/config/mpl_backend.chandralc", "r") as f:
 
@@ -21,7 +21,12 @@ with open(clc_path + "/config/mpl_backend.chandralc", "r") as f:
         matplotlib.use("agg")
         plt.ioff()
         print("Using agg backend for plotting")
-        
+
+def _cxo(path):
+    path = path.split("/")[-1].split("_")[0]
+    
+    return path
+
 def lightcurve(
     lc,
     binning=500.0,
@@ -34,7 +39,7 @@ def lightcurve(
     directory=".",
     show=True,
     timespan=False,
-    ymax=None
+    ymax=None,
 ):
     """Plot binned lightcurves over time.
 
@@ -108,7 +113,7 @@ def lightcurve(
 
     plt.rc("xtick", labelsize=30)
     plt.rc("ytick", labelsize=22)
-    plt.title(f"{binning}s Binned Lightcurve for {lc.coords} ObsID {lc.obsid}")
+    plt.title(f"{binning}s Binned Lightcurve for {_cxo(lc.path)} ObsID {lc.obsid}")
     plt.plot(time_array, avg, color=color)
 
     # adjusting the scale of axis
@@ -126,7 +131,7 @@ def lightcurve(
     if save:
         figure = plt.gcf()
         figure.savefig(
-            f"{directory}/chandralc_lightcurve_{lc.coords}_{lc.obsid}_{binning}.jpg",
+            f"{directory}/chandralc_lightcurve_{_cxo(lc.path)}_{lc.obsid}_{binning}.jpg",
             bbox_inches="tight",
         )
     if show:
@@ -172,7 +177,7 @@ def cumulative(
     plt.plot(lc.time_array, lc.cumulative_counts, color=color)
     plt.xlabel("Time (ks)")
     plt.ylabel("Net Photon Counts")
-    plt.title(f"Cumulative Photon Count v/s Time Plot for {lc.coords} ObsID {lc.obsid}")
+    plt.title(f"Cumulative Photon Count v/s Time Plot for {_cxo(lc.path)} ObsID {lc.obsid}")
     plt.rc("text", usetex=False)
     plt.rc("font", family=family)
     plt.xlabel(r"Time (ks)", fontsize=fontsize)
@@ -183,7 +188,7 @@ def cumulative(
     if save:
         figure = plt.gcf()
         figure.savefig(
-            f"{directory}/chandralc_cumulative_{lc.coords}_{lc.obsid}.jpg",
+            f"{directory}/chandralc_cumulative_{_cxo(lc.path)}_{lc.obsid}.jpg",
             bbox_inches="tight",
         )
 
@@ -191,4 +196,3 @@ def cumulative(
         plt.show()
 
     plt.close()
-

@@ -41,7 +41,7 @@ def download_db():
     """Download database index."""
     if "file_dbs" not in os.listdir(clc_path):
         os.mkdir(clc_path + "/file_dbs")
-    
+
         count = 1
         total_time = 0
         size = 0
@@ -55,7 +55,9 @@ def download_db():
                 url = f"https://raw.githubusercontent.com/sammarth-k/Chandra-Lightcurve-Download/main/file_dbs/{db}.csv"
                 data = requests.get(url)
 
-                with open(f"{clc_path}/file_dbs/{db}.csv", "w", encoding="utf-8") as file:
+                with open(
+                    f"{clc_path}/file_dbs/{db}.csv", "w", encoding="utf-8"
+                ) as file:
                     file.write(data.text)
 
                 size += len(data.text)
@@ -70,7 +72,7 @@ def download_db():
                 )
 
                 count += 1
-            
+
     elif "file_dbs" in os.listdir():
         count = 1
         total_time = 0
@@ -79,7 +81,7 @@ def download_db():
         for repo in repos:
 
             for db in repo:
-                
+
                 if f"{db}.csv" not in os.listdir(clc_path + "/file_dbs"):
 
                     start = time.time()
@@ -87,7 +89,9 @@ def download_db():
                     url = f"https://raw.githubusercontent.com/sammarth-k/Chandra-Lightcurve-Download/main/file_dbs/{db}.csv"
                     data = requests.get(url)
 
-                    with open(f"{clc_path}/file_dbs/{db}.csv", "w", encoding="utf-8") as file:
+                    with open(
+                        f"{clc_path}/file_dbs/{db}.csv", "w", encoding="utf-8"
+                    ) as file:
                         file.write(data.text)
 
                     size += len(data.text)
@@ -253,7 +257,7 @@ def download_lcs(filenames, directory="."):
         pass
 
     for filename in filenames:
-        
+
         # timer
         start = time.time()
 
@@ -273,7 +277,7 @@ def download_lcs(filenames, directory="."):
         # using a GET request to download lightcurve
         try:
             data = requests.get(url)
-            
+
             # Exception in case of Error 404
             data.raise_for_status()
 

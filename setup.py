@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='chandralc',
-    version='0.0.1-beta',
+    version='0.0.1-gamma',
     packages=find_packages(),
     url='https://github.com/sammarth-k/chandralc',
     license='MIT',

@@ -115,7 +115,7 @@ class ChandraLightcurve:
         directory=".",
         show=True,
         timespan=False,
-        ymax=None
+        ymax=None,
     ):
         """Plots cumulative photon counts over time.
 
@@ -153,7 +153,7 @@ class ChandraLightcurve:
             directory=directory,
             show=show,
             timespan=timespan,
-            ymax=ymax
+            ymax=ymax,
         )
 
     def cumulative(
@@ -252,15 +252,9 @@ class ChandraLightcurve:
             Whether flare(s) is/are detected or not
         """
         if ml.calculate_r(self.time_array, self.cumulative_counts) ** 2 <= 0.998:
-            if (
-                len(
-                    states.flare_detect(
-                        self, binsize=binsize, sigma=sigma, threshold=threshold
-                    )
-                )
-                > 0
-            ):
-                return True
+            return states.flare_detect(
+                self, binsize=binsize, sigma=sigma, threshold=threshold
+            )
 
         return False
 
