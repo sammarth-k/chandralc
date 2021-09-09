@@ -25,14 +25,13 @@ dbs1 = [
     "M81",
     "M83",
     "M84",
-    "M87",
     "NGC1399",
     "NGC5128",
     "NGC6946",
     "LMC",
     "SMC",
 ]
-dbs2 = ["M51", "NGC4736", "NGC1313", "M82", "M33"]
+dbs2 = ["M51", "NGC4736", "NGC1313", "M82", "M33", "M87"]
 dbs = dbs1 + dbs2
 repos = [dbs1, dbs2]
 
