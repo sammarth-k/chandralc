@@ -56,7 +56,7 @@ Extract lightcurves from one or more ObsIDs automatically. This feautre is not y
 
 - NASA ADS
   - Search for listings which include the source
-  - Simple usage: only one method require (`.search_ads()`)
+  - Simple usage: only one method required (`.search_ads()`)
 
 ##### Upcoming features:
 
