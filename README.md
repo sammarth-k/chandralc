@@ -67,6 +67,7 @@ Extract lightcurves from one or more ObsIDs automatically. This feautre is not y
 
 1. Install dependencies via the `requirements.txt` file: `pip install requirements.txt`
 2. Install the `chandralc` package via PIP: `pip install chandralc`
+3. File Databases will automatically be downloaded on import of package
 
 [more details coming soon]
 
