@@ -116,6 +116,7 @@ class ChandraLightcurve:
         show=True,
         timespan=False,
         ymax=None,
+        title=None
     ):
         """Plots cumulative photon counts over time.
 
@@ -139,6 +140,8 @@ class ChandraLightcurve:
             range of x axis (kiloseconds), by default False
         ymax : float, optional
             Maximum y-axis value, by default None
+        title : str, optional
+            Title of file and plot, by default None
         """
 
         plot.lightcurve(
@@ -154,6 +157,7 @@ class ChandraLightcurve:
             show=show,
             timespan=timespan,
             ymax=ymax,
+            title=title
         )
 
     def cumulative(
@@ -165,6 +169,7 @@ class ChandraLightcurve:
         save=False,
         directory=".",
         show=True,
+        title=None  
     ):
         """Plot binned lightcurves over time.
 
@@ -188,6 +193,8 @@ class ChandraLightcurve:
             Directory to save figure in, by default "."
         show : bool, optional
             Show plot or not, by default True
+        title : str, optional
+            Title of file and plot, by default None
         """
 
         plot.cumulative(
@@ -199,6 +206,7 @@ class ChandraLightcurve:
             save=save,
             directory=directory,
             show=show,
+            title=title
         )
 
     ### STATE DETECTION ###

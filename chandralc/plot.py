@@ -40,6 +40,7 @@ def lightcurve(
     show=True,
     timespan=False,
     ymax=None,
+    title=None
 ):
     """Plot binned lightcurves over time.
 
@@ -69,6 +70,8 @@ def lightcurve(
         range of x axis (kiloseconds), by default False
     ymax : float, optional
         Maximum y-axis value, by default None
+    title : str, optional
+        Title of file and plot, by default None
     """
 
     photons_in_group = []
@@ -113,7 +116,10 @@ def lightcurve(
 
     plt.rc("xtick", labelsize=30)
     plt.rc("ytick", labelsize=22)
-    plt.title(f"{binning}s Binned Lightcurve for {_cxo(lc.path)} ObsID {lc.obsid}")
+    if title is None:
+        plt.title(f"{binning}s Binned Lightcurve for {_cxo(lc.path)} ObsID {lc.obsid}")
+    else:
+        plt.title(title)
     plt.plot(time_array, avg, color=color)
 
     # adjusting the scale of axis
@@ -127,7 +133,7 @@ def lightcurve(
 
     if timespan is not False:
         plt.xlim(timespan[0], timespan[1])
-
+    
     if save:
         figure = plt.gcf()
         figure.savefig(
@@ -149,6 +155,7 @@ def cumulative(
     save=False,
     directory=".",
     show=True,
+    title=None
 ):
     """Plots cumulative photon counts over time.
 
@@ -170,6 +177,8 @@ def cumulative(
         Directory to save figure in, by default "."
     show : bool, optional
         Show plot or not, by default True
+    title : str, optional
+        Title of file and plot, by default None
     """
 
     # plotting
@@ -187,10 +196,16 @@ def cumulative(
 
     if save:
         figure = plt.gcf()
-        figure.savefig(
-            f"{directory}/chandralc_cumulative_{_cxo(lc.path)}_{lc.obsid}.jpg",
-            bbox_inches="tight",
-        )
+        if title is not None:
+            figure.savefig(
+                f"{directory}/chandralc_cumulative_{_cxo(lc.path)}_{lc.obsid}.jpg",
+                bbox_inches="tight",
+            )
+        else:
+             figure.savefig(
+                f"{title}.jpg",
+                bbox_inches="tight",
+            )
 
     if show:
         plt.show()
