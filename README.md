@@ -81,8 +81,9 @@ If you use ``chandralc`` in your research, please cite it as follows:
 	title = "{chandralc: Python Package for CXO Lightcurve Analysis}",
 	keywords = {Software, Chandra, CXO, lightcurves },
 	url = {https://github.com/sammarth-k/chandralc},
-	publisher = {\url{{https://github.com/sammarth-k/chandralc}}},
+	howpublished = {https://github.com/sammarth-k/chandralc},
 	year = {2021},
 	month = {May},
 }
+
 ```
