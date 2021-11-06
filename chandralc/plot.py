@@ -135,6 +135,10 @@ def lightcurve(
         plt.xlim(timespan[0], timespan[1])
     
     if save:
+        try:
+            os.mkdir(directory)
+        except:
+            pass
         figure = plt.gcf()
         figure.savefig(
             f"{directory}/chandralc_lightcurve_{_cxo(lc.path)}_{lc.obsid}_{binning}.jpg",
@@ -196,6 +200,12 @@ def cumulative(
 
     if save:
         figure = plt.gcf()
+        
+        try:
+            os.mkdir(directory)
+        except:
+            pass
+            
         if title is not None:
             figure.savefig(
                 f"{directory}/chandralc_cumulative_{_cxo(lc.path)}_{lc.obsid}.jpg",
