@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: chandralc
-Version: 0.0.1b0
+Version: 0.0.1a0
 Summary: A Python package for CXO lightcurve analysis
 Home-page: https://github.com/sammarth-k/chandralc
 Author: Sammarth Kumar
@@ -11,7 +11,10 @@ Description: ![chandralc](https://raw.githubusercontent.com/sammarth-k/chandralc
         # chandralc: A Python Package for CXO Lightcurve Analysis
         
         <p align="left">
-         <a href="LICENSE.txt"><img src = "https://img.shields.io/github/license/sammarth-k/chandralc?logo=MIT"></a> <a herfF="https://python.org" target="_blank"><img src="https://img.shields.io/badge/Made%20with-Python-306998.svg"></a> <a href="https://github.com/psf/black"><img alt="Code style: black" src="https://img.shields.io/badge/code%20style-black-000000.svg"></a>
+         <a href="https://github.com/sammarth-k/chandralc/blob/main/LICENSE.txt"><img src = "https://img.shields.io/github/license/sammarth-k/chandralc?logo=MIT"></a> 
+        <a href="https://pypi.org/project/chandralc"><img src="https://img.shields.io/pypi/v/chandralc?color=blue"></a>
+        <img src="https://img.shields.io/github/v/tag/sammarth-k/chandralc?color=red">
+        <a href="https://github.com/psf/black"><img alt="Code style: black" src="https://img.shields.io/badge/code%20style-black-000000.svg"></a>
         
         The `chandralc` Python package was developed to analyze Chandra X-ray Observatory lightcurves in a matter of seconds. With algorithms and programs to automatically extract, download, plot, and analyze data, it is the perfect tool to study CXO lightcurves efficiently and accurately.
         
@@ -61,7 +64,7 @@ Description: ![chandralc](https://raw.githubusercontent.com/sammarth-k/chandralc
         
         - NASA ADS
           - Search for listings which include the source
-          - Simple usage: only one method require (`.search_ads()`)
+          - Simple usage: only one method required (`.search_ads()`)
         
         ##### Upcoming features:
         
@@ -72,6 +75,7 @@ Description: ![chandralc](https://raw.githubusercontent.com/sammarth-k/chandralc
         
         1. Install dependencies via the `requirements.txt` file: `pip install requirements.txt`
         2. Install the `chandralc` package via PIP: `pip install chandralc`
+        3. File Databases will automatically be downloaded on import of package
         
         [more details coming soon]
         
@@ -85,10 +89,11 @@ Description: ![chandralc](https://raw.githubusercontent.com/sammarth-k/chandralc
         	title = "{chandralc: Python Package for CXO Lightcurve Analysis}",
         	keywords = {Software, Chandra, CXO, lightcurves },
         	url = {https://github.com/sammarth-k/chandralc},
-        	publisher = {\url{{https://github.com/sammarth-k/chandralc}}},
+        	howpublished = {https://github.com/sammarth-k/chandralc},
         	year = {2021},
         	month = {May},
         }
+        
         ```
         
 Platform: UNKNOWN

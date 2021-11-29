@@ -92,10 +92,17 @@ class ChandraLightcurve:
         self.rate_s = self.rate_ks / 1000
 
         # Source information
-        file = file.split("_lc.fits")[0].split("_")
-        file = file.split("/")[-1] if "/" in file else file
-        self.obsid = file[1]
-        self.coords = convert.extract_coords(self.path)
+        try:
+            file = file.split("_lc.fits")[0].split("_")
+            file = file.split("/")[-1] if "/" in file else file
+            self.obsid = file[1]
+            self.coords = convert.extract_coords(self.path)
+            
+        except:
+            file = file
+            self.obsid = None
+            self.coords = None
+            
         try:
             self.galaxy = download.get_galaxy(self.path)
         except:
