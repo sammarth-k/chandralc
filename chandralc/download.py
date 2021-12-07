@@ -293,7 +293,7 @@ def download_lcs(filenames, directory="."):
             t += end - start
 
             print(
-                f"    Progress: {count} of {len(filenames)} downloaded | Total Size: {round(size/1048576,2)} MB | Time Elapsed: {round(t,2)} seconds",
+                f"    Progress: {count} of {len(filenames)} downloaded | Total Size: {round(size/1048576,2)} MB | Time Elapsed: {round(t,2)} seconds | Speed: {round(size/(1048576*t),2)}                  ",
                 end="\r",
             )
 
