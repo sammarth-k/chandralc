@@ -135,8 +135,8 @@ def eclipse_mark(lc):
                 300 * 3.241 / 1000,
                 max(binned),
                 linewidth=1,
-                edgecolor="r",
-                facecolor="red",
+                edgecolor="(253, 38, 103, 0.26)",
+                facecolor="(253, 38, 103, 0.26)",
             )
             ax.add_patch(rect)
 
