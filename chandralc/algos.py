@@ -15,7 +15,7 @@ def flare_detect(lc, binsize=10, sigma=3, threshold=0.3):
     binsize : int
         Size of bin, by default 10
     sigma : float
-        Number of standard deviations of regression slope above mean of regression slopes of all bins, by default 3
+        No. of std. deviations of slope above mean of slopes of all bins, by default 3
     threshold : float
         Threshold of clustering of bins which could be part of a flare from 0 to 1, by default 0.3
 

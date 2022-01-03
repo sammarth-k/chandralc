@@ -18,6 +18,6 @@ except:
 
 # make ADS log file if it does not exist
 if "ads.csv" not in os.listdir(clc_path + "/logs"):
-    with open(clc_path + "/logs/ads.csv", "w", newline="") as f:
+    with open(clc_path + "/logs/ads.csv", "w", newline="", encoding="utf-8") as f:
         writer = csv.writer(f)
         writer.writerow(["Timestamp", "URL"])

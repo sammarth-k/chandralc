@@ -97,12 +97,12 @@ class ChandraLightcurve:
             file = file.split("/")[-1] if "/" in file else file
             self.obsid = file[1]
             self.coords = convert.extract_coords(self.path)
-            
+
         except:
             file = file
             self.obsid = None
             self.coords = None
-            
+
         try:
             self.galaxy = download.get_galaxy(self.path)
         except:
@@ -123,7 +123,7 @@ class ChandraLightcurve:
         show=True,
         timespan=False,
         ymax=None,
-        title=None
+        title=None,
     ):
         """Plots cumulative photon counts over time.
 
@@ -164,7 +164,7 @@ class ChandraLightcurve:
             show=show,
             timespan=timespan,
             ymax=ymax,
-            title=title
+            title=title,
         )
 
     def cumulative(
@@ -176,7 +176,7 @@ class ChandraLightcurve:
         save=False,
         directory=".",
         show=True,
-        title=None  
+        title=None,
     ):
         """Plot binned lightcurves over time.
 
@@ -213,7 +213,7 @@ class ChandraLightcurve:
             save=save,
             directory=directory,
             show=show,
-            title=title
+            title=title,
         )
 
     ### STATE DETECTION ###

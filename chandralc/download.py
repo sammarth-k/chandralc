@@ -6,6 +6,7 @@ import csv
 import time
 import requests
 import inspect
+import concurrent.futures
 
 # chandralc modules
 from chandralc import convert
@@ -232,7 +233,7 @@ def coordinate_search(coordinates):
 
 
 # downloading lightcurves from GitHub repository
-def download_lcs(filenames, directory="."):
+def download_lcs_unthreaded(filenames, directory="."):
     """Download raw ligtcurves from database.
 
     Parameters
@@ -256,6 +257,10 @@ def download_lcs(filenames, directory="."):
         pass
 
     for filename in filenames:
+
+        # skip files which have been downloaded
+        if filename in os.listdir():
+            continue
 
         # timer
         start = time.time()
@@ -303,3 +308,86 @@ def download_lcs(filenames, directory="."):
             print(
                 f"{filename}: Error 404: Page Not Found. Please make sure you have used the correct filename"
             )
+
+
+# ----------------------------------------------------------
+
+
+def download_lc(file):
+    """Download a single lightcurve from the database.
+
+    Parameters
+    ----------
+    file : str
+        Filename of lightcurve to download.
+    """
+
+    galaxy = get_galaxy(file)
+
+    # getting repo number
+    repo_num = 0
+    for i in range(len(repos)):
+        if galaxy in repos[i]:
+            repo_num = i + 1
+            break
+
+    # url of lightcurve
+    url = f"https://raw.githubusercontent.com/sammarth-k/CXO-lightcurves{repo_num}/main/{galaxy}/textfiles/{file}"
+
+    data = requests.get(url).text
+    all_data["files"] += 1
+    with open(f"{file}", "w", encoding="utf-8") as f:
+        f.write(data)
+
+    print(
+        f"Downloaded {all_data['files']} of {download_total} | Time Elapsed: {round(time.time() - download_start,2)}s | Rate: {round((all_data['files'])/(time.time() - download_start),2)} files/s                  ",
+        end="\r",
+    )
+
+
+def download_lcs(files, directory=".", threads=3):
+    """Download raw ligtcurves from database.
+
+    Parameters
+    ----------
+    files : list
+        List of filenames to download
+    directory : str, optional
+        Directory to store files (creted if it does not exist), by default "."
+    threads : int, optional
+        Number of threads for multithreading, by default 3
+    """
+
+    print("Your download will begin shortly...     ", end="\r")
+
+    # creating global variables
+    global download_start, all_data, download_total
+
+    # download start time
+    download_start = time.time()
+
+    # data storage list
+    all_data = {"files": 0}
+
+    # total number of files
+    download_total = len(files)
+
+    print(f"Creating directory {directory}...          ", end="\r")
+
+    try:
+        os.mkdir(directory)
+    except:
+        pass
+    finally:
+        os.chdir(directory)
+
+    print(f"Starting Download...                                       ", end="\r")
+
+    # multithread processing
+    with concurrent.futures.ThreadPoolExecutor(threads) as executor:
+
+        # mapping function over files
+        executor.map(download_lc, files)
+
+    # delete `all_data` list
+    del all_data

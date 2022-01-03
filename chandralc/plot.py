@@ -22,10 +22,12 @@ with open(clc_path + "/config/mpl_backend.chandralc", "r") as f:
         plt.ioff()
         print("Using agg backend for plotting")
 
+
 def _cxo(path):
     path = path.split("/")[-1].split("_")[0]
-    
+
     return path
+
 
 def lightcurve(
     lc,
@@ -40,7 +42,7 @@ def lightcurve(
     show=True,
     timespan=False,
     ymax=None,
-    title=None
+    title=None,
 ):
     """Plot binned lightcurves over time.
 
@@ -133,7 +135,7 @@ def lightcurve(
 
     if timespan is not False:
         plt.xlim(timespan[0], timespan[1])
-    
+
     if save:
         try:
             os.mkdir(directory)
@@ -159,7 +161,7 @@ def cumulative(
     save=False,
     directory=".",
     show=True,
-    title=None
+    title=None,
 ):
     """Plots cumulative photon counts over time.
 
@@ -190,7 +192,9 @@ def cumulative(
     plt.plot(lc.time_array, lc.cumulative_counts, color=color)
     plt.xlabel("Time (ks)")
     plt.ylabel("Net Photon Counts")
-    plt.title(f"Cumulative Photon Count v/s Time Plot for {_cxo(lc.path)} ObsID {lc.obsid}")
+    plt.title(
+        f"Cumulative Photon Count v/s Time Plot for {_cxo(lc.path)} ObsID {lc.obsid}"
+    )
     plt.rc("text", usetex=False)
     plt.rc("font", family=family)
     plt.xlabel(r"Time (ks)", fontsize=fontsize)
@@ -200,19 +204,19 @@ def cumulative(
 
     if save:
         figure = plt.gcf()
-        
+
         try:
             os.mkdir(directory)
         except:
             pass
-            
+
         if title is not None:
             figure.savefig(
                 f"{directory}/chandralc_cumulative_{_cxo(lc.path)}_{lc.obsid}.jpg",
                 bbox_inches="tight",
             )
         else:
-             figure.savefig(
+            figure.savefig(
                 f"{title}.jpg",
                 bbox_inches="tight",
             )

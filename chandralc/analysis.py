@@ -1,13 +1,10 @@
 """This module contains functions for lightcurve analysis."""
 
 # dependencies
+import warnings
 import matplotlib.pyplot as plt
 from scipy import signal
 import numpy as np
-import warnings
-
-# chandralc modules
-from chandralc import ml
 
 
 def psd(lightcurve, save=False, directory=".", show=True):
