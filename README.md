@@ -9,8 +9,10 @@
 <a href="https://github.com/psf/black"><img alt="Code style: black" src="https://img.shields.io/badge/code%20style-black-000000.svg"></a>
 
 The `chandralc` Python package was developed to analyze Chandra X-ray Observatory lightcurves in a matter of seconds. With algorithms and programs to automatically extract, download, plot, and analyze data, it is the perfect tool to study CXO lightcurves efficiently and accurately.
+	
+`chandralc` is the perfect tool for citizen science. If you're interested in detecting extragalactic planets, feel free to shoot me an email at sam@qprogramming.net!
 
-To see ``chandralc`` in action, check out [the demo](https://github.com/sammarth-k/chandralc/blob/main/demo.ipynb).
+To see ``chandralc`` in action, check out [the demo](https://github.com/sammarth-k/chandralc/blob/main/demo.ipynb) (currently in development).
 
 ### Features:
 
