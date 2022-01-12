@@ -79,19 +79,15 @@ def lightcurve(
     photons_in_group = []
 
     group_size = int(binning / lc.chandra_bin)
-
-    # range: total number of df points over included bins --> temp3 of intervals
-    for j in range(len(lc.raw_phot) // group_size):
-
-        # len(temp1) of intervals total_time temp3 of bins in that interval
-        j = j * group_size
+    
+    for i in range(len(lc.raw_phot) // group_size):
+        i = i * group_size
         temp2 = 0
 
-        for k in range(group_size):
-            # sum of all photons within one interval
-            temp2 = temp2 + lc.raw_phot[j + k]
-
-        # appends that sum to a list
+        for j in range(group_size):
+            # sum of photons
+            temp2 = temp2 + lc.raw_phot[i + j]
+            
         photons_in_group.append(temp2)
 
     avg_phot = (
