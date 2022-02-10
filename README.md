@@ -50,6 +50,7 @@ Extract lightcurves from one or more ObsIDs automatically. This feautre is not y
 - Running Average Plot
 
 #### State Detection
+Note: the flare detection algorithm is currently under development and has not been extensively tested. The eclipse detection algorithm has been tested on a sample of 150,000+ X-ray lightcurves and it was able to rediscover known transits and eclipses (including that of the first extragalactic planet candidate). It has also been used by the author of this package to make new discoveries.
 
 - Flares
 - Eclipses
