@@ -7,6 +7,7 @@ import time
 import requests
 import inspect
 import concurrent.futures
+import json
 
 # chandralc modules
 from chandralc import convert
@@ -17,28 +18,25 @@ clc_path = os.path.dirname(inspect.getfile(convert))
 # Downloading databases
 
 # list of galaxies with extracted lightcurves
-dbs1 = [
-    "M101",
-    "M104",
-    "M31",
-    "M49",
-    "M74",
-    "M81",
-    "M83",
-    "M84",
-    "NGC1399",
-    "NGC5128",
-    "NGC6946",
-    "LMC",
-    "SMC",
-]
-dbs2 = ["M51", "NGC4736", "NGC1313", "M82", "M33", "M87"]
-dbs3 = ['NGC4631','NGC 247','NGC 300','NGC4038']
-dbs = dbs1 + dbs2 + dbs3
-repos = [dbs1, dbs2, dbs3]
+if "file_dbs" not in os.listdir(clc_path):
+        os.mkdir(clc_path + "/file_dbs")
+       
+# updating local copy of dbs.json
+db_data = requests.get("https://raw.githubusercontent.com/sammarth-k/chandralc/main/file_dbs/dbs.json").text
 
-energy = {i:"1500:7000" for i in dbs1+dbs2} + {i:"500:7000" for i in dbs3}
-
+with open(f"{clc_path}/file_dbs/dbs.json", "w+") as f:
+    f.write(db_data)
+    f.flush()
+    f.seek(0)
+    json_data = json.load(f)
+    
+# data variables
+dbs = []
+for db in json_data: 
+    exec(f"{db} = json_data[db]")
+    dbs += [db]
+    
+repos = list(json_data.values())[:-1]
 
 def download_db():
     """Download database index."""
@@ -70,7 +68,7 @@ def download_db():
                 total_time += end - start
 
                 print(
-                    f"Progress: {count} of {len([db for repo in repos for db in repo])} downloaded | Total Size: {round(size/1024,2)} KB | Time Elapsed: {round(total_time,2)} seconds",
+                    f"Progress: {count} of {len([db for repo in repos for db in repo])} downloaded | Total Size: {round(size/1024,2)} KB | Time Elapsed: {round(total_time,2)} seconds          ",
                     end="\r",
                 )
 
@@ -104,12 +102,12 @@ def download_db():
                     total_time += end - start
 
                     print(
-                        f"Progress: {count} of {len(dbs)} downloaded | Total Download Size: {round(size/1024,2)} KB | Time Elapsed: {round(total_time,2)} seconds",
+                        f"Progress: {count} of {len([db for repo in repos for db in repo])} downloaded | Total Download Size: {round(size/1024,2)} KB | Time Elapsed: {round(total_time,2)} seconds       ",
                         end="\r",
                     )
 
                 count += 1
-
+        print()
         return
 
 
