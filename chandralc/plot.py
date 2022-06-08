@@ -28,7 +28,10 @@ def _cxo(path):
 
     return path
 
-
+def _makepath(path):
+    if not os.path.exists(path):
+        os.mkdir(path)
+        
 def lightcurve(
     lc,
     binning=500.0,
@@ -133,10 +136,7 @@ def lightcurve(
         plt.xlim(timespan[0], timespan[1])
 
     if save:
-        try:
-            os.mkdir(directory)
-        except:
-            pass
+        _makepath(directory)
         figure = plt.gcf()
         figure.savefig(
             f"{directory}/chandralc_lightcurve_{_cxo(lc.path)}_{lc.obsid}_{binning}.jpg",
@@ -201,10 +201,7 @@ def cumulative(
     if save:
         figure = plt.gcf()
 
-        try:
-            os.mkdir(directory)
-        except:
-            pass
+        _makepath(directory)
 
         if title is not None:
             figure.savefig(

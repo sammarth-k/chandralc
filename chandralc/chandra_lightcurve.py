@@ -16,8 +16,7 @@ from chandralc.apis import ads
 
 # specific function
 from chandralc import download
-
-
+        
 class ChandraLightcurve:
     """Class for lightcurve plotting and analysis.
 
@@ -45,6 +44,8 @@ class ChandraLightcurve:
         Array of cumulative photon counts
     time_array : list
         Array of time intervals
+    energy : str
+        Energy band of the lightcurve
     """
 
     def __init__(self, file):
@@ -93,8 +94,10 @@ class ChandraLightcurve:
 
             try:
                 self.galaxy = download.get_galaxy(self.path)
+                self.energy = download.energy[self.galaxy]
             except:
                 self.galaxy = None
+                self.energy = None
 
         # count net photon count
         self.count = 0
@@ -217,6 +220,7 @@ class ChandraLightcurve:
         title : str, optional
             Title of file and plot, by default None
         """
+        
 
         plot.cumulative(
             self,

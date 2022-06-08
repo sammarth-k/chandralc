@@ -33,8 +33,11 @@ dbs1 = [
     "SMC",
 ]
 dbs2 = ["M51", "NGC4736", "NGC1313", "M82", "M33", "M87"]
-dbs = dbs1 + dbs2
-repos = [dbs1, dbs2]
+dbs3 = ['NGC4631','NGC 247','NGC 300','NGC4038']
+dbs = dbs1 + dbs2 + dbs3
+repos = [dbs1, dbs2, dbs3]
+
+energy = {i:"1500:7000" for i in dbs1+dbs2} + {i:"500:7000" for i in dbs3}
 
 
 def download_db():
