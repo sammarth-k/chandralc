@@ -19,24 +19,27 @@ clc_path = os.path.dirname(inspect.getfile(convert))
 
 # list of galaxies with extracted lightcurves
 if "file_dbs" not in os.listdir(clc_path):
-        os.mkdir(clc_path + "/file_dbs")
-       
+    os.mkdir(clc_path + "/file_dbs")
+
 # updating local copy of dbs.json
-db_data = requests.get("https://raw.githubusercontent.com/sammarth-k/chandralc/main/file_dbs/dbs.json").text
+db_data = requests.get(
+    "https://raw.githubusercontent.com/sammarth-k/chandralc/main/file_dbs/dbs.json"
+).text
 
 with open(f"{clc_path}/file_dbs/dbs.json", "w+") as f:
     f.write(db_data)
     f.flush()
     f.seek(0)
     json_data = json.load(f)
-    
+
 # data variables
 dbs = []
-for db in json_data: 
+for db in json_data:
     exec(f"{db} = json_data[db]")
     dbs += [db]
-    
+
 repos = list(json_data.values())[:-1]
+
 
 def download_db():
     """Download database index."""
@@ -68,7 +71,7 @@ def download_db():
                 total_time += end - start
 
                 print(
-                    f"Progress: {count} of {len([db for repo in repos for db in repo])} downloaded | Total Size: {round(size/1024,2)} KB | Time Elapsed: {round(total_time,2)} seconds          ",
+                    f"Progress: {count} of {len([db for repo in repos for db in repo])} downloaded | Total Size: {round(size/1024,2)} KB | Time Elapsed: {round(total_time,2)} seconds",
                     end="\r",
                 )
 
@@ -102,12 +105,12 @@ def download_db():
                     total_time += end - start
 
                     print(
-                        f"Progress: {count} of {len([db for repo in repos for db in repo])} downloaded | Total Download Size: {round(size/1024,2)} KB | Time Elapsed: {round(total_time,2)} seconds       ",
+                        f"Progress: {count} of {len(dbs)} downloaded | Total Download Size: {round(size/1024,2)} KB | Time Elapsed: {round(total_time,2)} seconds",
                         end="\r",
                     )
 
                 count += 1
-        print()
+
         return
 
 
@@ -186,7 +189,7 @@ def get_galaxy(filename):
 # ----------------------------------------------------------
 
 
-def coordinate_search(coordinates):
+def coordinate_search(coordinates, radius):
     """Search for files close to the given coordinates.
 
     Parameters
@@ -211,14 +214,17 @@ def coordinate_search(coordinates):
     # counter variable
     count = 0
 
+    # converting radius from arcseconds to degrees
+    radius = radius * 0.000277778
+
     for file in files:
 
         # extracting file coordinates in degrees from filename
         file_ra, file_dec = convert.to_deg(convert.extract_coords(file))
 
         # add file if within search radius
-        ra_check = file_ra * 0.999995 <= search_ra <= file_ra * 1.000005
-        dec_check = file_dec * 0.999995 <= search_dec <= file_dec * 1.000005
+        ra_check = file_ra - radius <= search_ra <= file_ra + radius
+        dec_check = file_dec - radius <= search_dec <= file_dec + radius
 
         if ra_check and dec_check:
             matching_files.append(file)
@@ -315,14 +321,6 @@ def download_lcs_unthreaded(filenames, directory="."):
 
 
 def download_lc(file):
-    """Download a single lightcurve from the database.
-
-    Parameters
-    ----------
-    file : str
-        Filename of lightcurve to download.
-    """
-
     galaxy = get_galaxy(file)
 
     # getting repo number
@@ -347,17 +345,6 @@ def download_lc(file):
 
 
 def download_lcs(files, directory=".", threads=3):
-    """Download raw ligtcurves from database.
-
-    Parameters
-    ----------
-    files : list
-        List of filenames to download
-    directory : str, optional
-        Directory to store files (creted if it does not exist), by default "."
-    threads : int, optional
-        Number of threads for multithreading, by default 3
-    """
 
     print("Your download will begin shortly...     ", end="\r")
 
@@ -392,3 +379,8 @@ def download_lcs(files, directory=".", threads=3):
 
     # delete `all_data` list
     del all_data
+
+
+def galaxy_download(galaxy, directory=None, threads=3):
+    directory = galaxy if directory is None else directory
+    download_lcs(get_files(galaxy), directory, threads)

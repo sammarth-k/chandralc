@@ -28,10 +28,12 @@ def _cxo(path):
 
     return path
 
+
 def _makepath(path):
     if not os.path.exists(path):
         os.mkdir(path)
-        
+
+
 def lightcurve(
     lc,
     binning=500.0,
@@ -82,7 +84,7 @@ def lightcurve(
     photons_in_group = []
 
     group_size = int(binning / lc.chandra_bin)
-    
+
     for i in range(len(lc.raw_phot) // group_size):
         i = i * group_size
         temp2 = 0
@@ -90,7 +92,7 @@ def lightcurve(
         for j in range(group_size):
             # sum of photons
             temp2 = temp2 + lc.raw_phot[i + j]
-            
+
         photons_in_group.append(temp2)
 
     avg_phot = (

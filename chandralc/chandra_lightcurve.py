@@ -16,7 +16,8 @@ from chandralc.apis import ads
 
 # specific function
 from chandralc import download
-        
+
+
 class ChandraLightcurve:
     """Class for lightcurve plotting and analysis.
 
@@ -61,7 +62,7 @@ class ChandraLightcurve:
 
         if "clc" in file:
             lc = dotclc.clcfile(file)
-            
+
             # attribute assignment
             self.chandra_bin = lc.time_resolution
             self.raw_phot = lc.photons
@@ -69,7 +70,7 @@ class ChandraLightcurve:
             self.energy_band = lc.energy_band
             self.obsid = lc.obsid
             self.coordinates = lc.coordinates
-            
+
         else:
             if "txt" in file:
                 self.df = convert.txt_to_df(file, convert.header_check(file))
@@ -79,7 +80,7 @@ class ChandraLightcurve:
             self.chandra_bin = 3.241039999999654
 
             self.raw_phot = np.array(self.df[self.df.EXPOSURE > 0].COUNTS)
-            
+
             # Source information
             try:
                 file = file.split("_lc.fits")[0].split("_")
@@ -121,7 +122,7 @@ class ChandraLightcurve:
             self.time = round(self.time_array[-1], 3)
         except:
             self.time = 0.0000001
-          
+
         self.rate_ks = round(self.count / self.time, 3)
         self.rate_s = self.rate_ks / 1000
 
@@ -220,7 +221,6 @@ class ChandraLightcurve:
         title : str, optional
             Title of file and plot, by default None
         """
-        
 
         plot.cumulative(
             self,
