@@ -42,6 +42,7 @@ repos = list(json_data.values())[:-1]
 
 
 def download_db():
+
     """Download database index."""
     if "file_dbs" not in os.listdir(clc_path):
         os.mkdir(clc_path + "/file_dbs")
@@ -51,7 +52,7 @@ def download_db():
         size = 0
 
         for repo in repos:
-
+            
             for db in repo:
 
                 start = time.time()
@@ -77,7 +78,7 @@ def download_db():
 
                 count += 1
 
-    elif "file_dbs" in os.listdir():
+    elif "file_dbs" in os.listdir(clc_path):
         count = 1
         total_time = 0
         size = 0
@@ -85,9 +86,9 @@ def download_db():
         for repo in repos:
 
             for db in repo:
-
+                
                 if f"{db}.csv" not in os.listdir(clc_path + "/file_dbs"):
-
+                
                     start = time.time()
 
                     url = f"https://raw.githubusercontent.com/sammarth-k/Chandra-Lightcurve-Download/main/file_dbs/{db}.csv"
@@ -105,7 +106,7 @@ def download_db():
                     total_time += end - start
 
                     print(
-                        f"Progress: {count} of {len(dbs)} downloaded | Total Download Size: {round(size/1024,2)} KB | Time Elapsed: {round(total_time,2)} seconds",
+                        f"Progress: {count} downloaded | Total Download Size: {round(size/1024,2)} KB | Time Elapsed: {round(total_time,2)} seconds",
                         end="\r",
                     )
 
