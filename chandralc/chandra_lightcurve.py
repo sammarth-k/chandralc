@@ -58,7 +58,7 @@ class ChandraLightcurve:
             Filename or filepath of raw lightcurve
         """
 
-        self.path = file
+        path = file
 
         if "clc" in file:
             lc = dotclc.clcfile(file)
@@ -86,7 +86,7 @@ class ChandraLightcurve:
                 file = file.split("_lc.fits")[0].split("_")
                 file = file.split("/")[-1] if "/" in file else file
                 self.obsid = file[1]
-                self.coords = convert.extract_coords(self.path)
+                self.coords = convert.extract_coords(path)
 
             except:
                 file = file
@@ -94,7 +94,7 @@ class ChandraLightcurve:
                 self.coords = None
 
             try:
-                self.galaxy = download.get_galaxy(self.path)
+                self.galaxy = download.get_galaxy(path)
                 self.energy = download.energy[self.galaxy]
             except:
                 self.galaxy = None
@@ -122,10 +122,15 @@ class ChandraLightcurve:
             self.time = round(self.time_array[-1], 3)
         except:
             self.time = 0.0000001
-
+        
+        self.start_time = self.df[TIME_MIN][0]
+        self.end_time = self.df[TIME_MAX][-1]
+        
         self.rate_ks = round(self.count / self.time, 3)
         self.rate_s = self.rate_ks / 1000
-
+        
+        self.path = path
+        
     ### GENERAL PLOTTING ###
 
     def lightcurve(
@@ -143,12 +148,16 @@ class ChandraLightcurve:
         ymax=None,
         title=None,
     ):
-        """Plots cumulative photon counts over time.
+        """Plot binned lightcurves over time.
 
         Parameters
         ----------
+        binning : float, optional
+            Binning in seconds, by default 500.0
         figsize : tuple, optional
             Size of figure in inches (length, breadth), by default (15, 9)
+        rate : bool, optional
+            Choose whether to plot count rate or net counts per bin on y-axis, by default True
         color : str, optional
             Color of plotted data, by default "blue"
         fontsize : int, optional
@@ -161,10 +170,6 @@ class ChandraLightcurve:
             Directory to save figure in, by default "."
         show : bool, optional
             Show plot or not, by default True
-        timespan: bool/tuple
-            range of x axis (kiloseconds), by default False
-        ymax : float, optional
-            Maximum y-axis value, by default None
         title : str, optional
             Title of file and plot, by default None
         """
@@ -196,16 +201,12 @@ class ChandraLightcurve:
         show=True,
         title=None,
     ):
-        """Plot binned lightcurves over time.
+        """Plots cumulative photon counts over time.
 
         Parameters
         ----------
-        binning : float, optional
-            Binning in seconds, by default 500.0
         figsize : tuple, optional
             Size of figure in inches (length, breadth), by default (15, 9)
-        rate : bool, optional
-            Choose whether to plot count rate or net counts per bin on y-axis, by default True
         color : str, optional
             Color of plotted data, by default "blue"
         fontsize : int, optional
@@ -218,6 +219,10 @@ class ChandraLightcurve:
             Directory to save figure in, by default "."
         show : bool, optional
             Show plot or not, by default True
+        timespan: bool/tuple
+            range of x axis (kiloseconds), by default False
+        ymax : float, optional
+            Maximum y-axis value, by default None
         title : str, optional
             Title of file and plot, by default None
         """

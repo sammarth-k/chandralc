@@ -1,10 +1,10 @@
 Metadata-Version: 2.1
 Name: chandralc
-Version: 0.0.1a0
+Version: 0.0.2a0
 Summary: A Python package for CXO lightcurve analysis
 Home-page: https://github.com/sammarth-k/chandralc
 Author: Sammarth Kumar
-Author-email: kumarsammarth@gmail.com
+Author-email: sam.kumar@yale.edu
 License: MIT
 Description: ![chandralc](https://raw.githubusercontent.com/sammarth-k/chandralc/main/images/chandralc.png)
         
@@ -17,8 +17,10 @@ Description: ![chandralc](https://raw.githubusercontent.com/sammarth-k/chandralc
         <a href="https://github.com/psf/black"><img alt="Code style: black" src="https://img.shields.io/badge/code%20style-black-000000.svg"></a>
         
         The `chandralc` Python package was developed to analyze Chandra X-ray Observatory lightcurves in a matter of seconds. With algorithms and programs to automatically extract, download, plot, and analyze data, it is the perfect tool to study CXO lightcurves efficiently and accurately.
+        	
+        `chandralc` is the perfect tool for citizen science. If you're interested in detecting extragalactic planets, feel free to shoot me an email at sam@qprogramming.net!
         
-        To see ``chandralc`` in action, check out [the demo](https://github.com/sammarth-k/chandralc/blob/main/demo.ipynb).
+        To see ``chandralc`` in action, check out [the demo](https://github.com/sammarth-k/chandralc/blob/main/demo.ipynb) (currently in development).
         
         ### Features:
         
@@ -56,6 +58,7 @@ Description: ![chandralc](https://raw.githubusercontent.com/sammarth-k/chandralc
         - Running Average Plot
         
         #### State Detection
+        Note: the flare detection algorithm is currently under development and has not been extensively tested. The eclipse detection algorithm has been tested on a sample of 150,000+ X-ray lightcurves and it was able to rediscover known transits and eclipses (including that of the first extragalactic planet candidate). It has also been used by the author of this package to make new discoveries.
         
         - Flares
         - Eclipses

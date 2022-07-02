@@ -355,6 +355,9 @@ def download_lcs(files, directory=".", threads=3):
     # download start time
     download_start = time.time()
 
+    # original directory
+    ordir = os.getcwd()
+    
     # data storage list
     all_data = {"files": 0}
 
@@ -380,6 +383,10 @@ def download_lcs(files, directory=".", threads=3):
 
     # delete `all_data` list
     del all_data
+    
+    # go back to original directory
+    os.chdir(ordir)
+    
 
 
 def galaxy_download(galaxy, directory=None, threads=3):
