@@ -76,7 +76,7 @@ Note: the flare detection algorithm is currently under development and has not b
 
 ##### Cite chandralc
 
-If you use ``chandralc`` in your research, please cite it as follows:
+If you use ``chandralc``, code from ``chandralc`` or data products (images, data) in your research, please cite it as follows:
 
 ```tex
 @MISC{chandralc,
